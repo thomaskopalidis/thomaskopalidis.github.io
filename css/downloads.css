@@ -1,13 +1,78 @@
-/* Download button styles */
 .download-btn {
-    background-color: #6a6a82;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: white;
+    opacity: 0.;
+    background-color: #1a1a2e;
     text-decoration: none;
+    border: 2px solid #493dbb;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 2px #493dbb;
+    margin-top: 40px;
+    opacity: 0.8;
 }
 
 .download-btn:hover {
-    background-color: #4a4a62;
+    box-shadow: 0 0 10px #493dbb;
+    border-color: #493dbb;
+} 
+
+
+
+
+
+
+
+
+
+
+/* .download-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #1a1a2e;
+    text-decoration: none;
+    border: 2px solid #493dbb;
+    border-radius: 5px;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+    margin-top: 40px;
+    transition: color 0.3s ease, border-color 0.3s ease;
+} */
+
+/* Create the gradient overlay */
+/* .download-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%; 
+    height: 100%;
+    background-image: linear-gradient(90deg, #1a1a2e, #008ff6, #e64cc3, #f45405, #1a1a2e);
+    transition: width 0.6s ease-in-out; 
+    z-index: 0; 
+    opacity: 0.5;
+} */
+/* #b762fb, #ea48ac, #f44734, */
+
+/* .download-btn:hover::before {
+    width: 100%; 
 }
+
+.download-btn:hover {
+    color: white; 
+    border-color: #b662fb00;
+
+}
+
+
+.download-btn span {
+    position: relative;
+    z-index: 1;
+} */
+
