@@ -1,0 +1,13 @@
+/* Section-specific styles */
+section {
+    padding: 100px 20px;
+    text-align: center;
+}
+
+#home {
+    background-color: #2e2e3a;
+}
+
+#about {
+    background-color: #3a3a4a;
+}
