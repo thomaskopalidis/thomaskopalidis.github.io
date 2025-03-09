@@ -1,13 +1,46 @@
-/* Base styles for the page */
+/* base.css */
+
+/* General Styles */
 body {
-    font-family: 'Roboto', sans-serif;
+    background-color: #1a1a2e;
+    color: #d3d3d3;
+    font-family: Red Hat Display, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #0f0f1a;
-    color: white;
+    overflow-x: hidden;
+    width: 100%;
 }
 
-h1, h2, h3, p {
-    margin: 0;
-    padding: 0;
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
+
+/* Generic Section Styles */
+section {
+    max-width: 1000px;
+    width: 90%; /* Makes sure it adapts on smaller screens */
+    padding: 100px 50px; /* Reduced right/left padding */
+    margin: 0 auto;
+    text-align: left;
+    min-height: auto;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 2s ease-in-out, opacity 2s ease-in-out;
+    scroll-margin-top: -30px;
+    box-sizing: border-box; /* Prevents padding from pushing content out */
+}
+
+
+/* Scroll Effect */
+section.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+
+/* Debbuging outlines.  {
+    outline: 1px solid red; 
+} 
