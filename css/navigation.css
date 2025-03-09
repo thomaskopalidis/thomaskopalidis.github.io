@@ -1,27 +1,200 @@
-/* Navigation styles */
+/* navigation.css */
+
+/* Navigation Bar (Remains the Same for Large Screens) */
 nav {
-    background-color: #1a1a1d;
-    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 15px 20px;
+    background-color: #1a1a2e;
+    position: fixed;
+    width: 80%; /* Adjust width to be less than full screen */
+    max-width: 1200px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    border-radius: 9px;
 }
 
-.nav-left, .nav-right {
+/* Navigation Items */
+.nav-left,
+.nav-right {
     list-style: none;
     display: flex;
+    padding: 0;
+    margin: 0;
 }
 
-.nav-left li, .nav-right li {
-    margin-right: 20px;
+.nav-left li,
+.nav-right li {
+    margin: 0 10px;
 }
 
-.nav-left a, .nav-right a {
-    color: #f0f0f0;
+.nav-left a,
+.nav-right a {
     text-decoration: none;
-    font-size: 1.2rem;
+    color: #7d689e;
+    font-weight: bold;
+    font-size: 1.0rem;
+    transition: color 0.3s;
 }
 
+.nav-left a:hover,
+.nav-right a:hover {
+    color: #493dbb;
+}
+
+/* Style for Contact Icons */
+.icon {
+    width: 30px;
+    height: 30px;
+    transition: fill 0.3s;
+    fill: #7d689e;
+}
+
+.nav-right a:hover .icon {
+    fill: #493dbb;
+}
+
+.nav-right a,
+.icon {
+    pointer-events: auto;
+}
+
+.nav-right li {
+    padding: 5px;
+}
+
+/* 🔹 Full-width Bar for Small Screens */
+.menu-bar {
+    display: none; /* Hidden on large screens */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px; /* Same height as nav */
+    background-color: #1a1a2e;
+    z-index: 999; /* Below the button, but above other content */
+}
+
+/* 🔹 Menu Toggle Button (Appears on Small Screens) */
 .menu-toggle {
-    display: none;
+    display: none; /* Hidden on large screens */
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1100; /* Ensure it's above the nav and menu bar */
+}
+
+
+/* Hamburger Icon */
+.menu-toggle .bar {
+    display: block;
+    width: 30px;
+    height: 4px;
+    background-color: #7d689e;
+    margin: 6px 0;
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+/* 🔹 Mobile Menu (Initially Hidden) */
+.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a2e;
+    text-align: center;
+    padding: 20px 0;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+/* Show Mobile Menu When Open */
+.mobile-menu.open {
+    display: flex;
+    flex-direction: column;
+    top: 60px;
+    background-image: linear-gradient(180deg, #1a1a2e,#1a1a2e,#1a1a2e, #221975);
+    border-radius: 5%;
+}
+
+/* Mobile Navigation Links */
+.mobile-menu a {
+    display: block;
+    color: #7d689e;
+    font-size: 1.5rem;
+    padding: 15px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.mobile-menu a:hover {
+    color: #493dbb;
+}
+
+
+/* Mobile Menu Icons */
+.mobile-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 20px; /* Spacing between icons */
+}
+
+.mobile-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.mobile-icons .icon {
+    width: 30px; /* Adjust icon size */
+    height: 30px;
+    fill: #7d689e; /* Default color */
+    transition: fill 0.3s;
+}
+
+.mobile-icons a:hover .icon {
+    fill: #493dbb; /* Color change on hover */
+}
+
+/* 🔹 Hide Nav Links on Small Screens & Show Menu */
+@media screen and (max-width: 768px) {
+    .menu-bar {
+        display: block;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-left,
+    .nav-right {
+        display: none; /* Hide regular navigation */
+    }
+}
+
+
+/* Animate the Hamburger Icon to "X" */
+.menu-toggle.active .bar:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+}
+
+.menu-toggle.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
 }
