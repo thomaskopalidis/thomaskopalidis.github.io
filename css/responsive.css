@@ -1,15 +1,118 @@
-/* Mobile and tablet responsive styles */
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-    }
+/* responsive.css */
 
-    .nav-left, .nav-right {
-        display: none;
+/* Responsive Design for Sections and Navigation */
+@media screen and (min-width: 1920px) {
+    section {
+        padding: 8vh 5vw;
     }
+}
 
-    .mobile-menu.open .nav-left, .mobile-menu.open .nav-right {
-        display: flex;
+@media screen and (min-width: 1440px) {
+    section {
+        padding: 8vh 5vw;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    nav {
+        width: 90%;
+    }
+    section {
+        padding: 8vh 5vw;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    nav {
         flex-direction: column;
+        align-items: center;
+    }
+    .nav-left,
+    .nav-right {
+        flex-direction: column;
+        text-align: center;
+    }
+    section {
+        padding: 6vh 5vw;
+    }
+    /* Typography adjustments for mobile screens */
+    h1 {
+        font-size: 2.5rem !important;
+    }
+    h2 {
+        font-size: 1.8rem !important;
+    }
+    p, a {
+        font-size: 1rem !important;
+    }
+
+    .cursor {
+        display: inline-block;
+        width: 5px;       /* fixed width */
+        height: 40px;     /* fixed height */
+        background: #493dbb;
+        border-radius: 3px;
+        margin-left: 5px;
+        margin-bottom: -5px;
+        animation: blink 1s infinite;
+    }
+
+    /* Ensure no horizontal scrolling */
+    html, body {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    /* Make sure navigation and menu bar stay inside viewport */
+    nav, .menu-bar, .mobile-menu {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* If any section is too wide, force it to fit */
+    section, div, ul {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 2.0rem !important;
+    }
+    h2 {
+        font-size: 1.3rem !important;
+    }
+    p {
+        font-size: 0.9rem !important;
+    }
+
+    /* Ensure no horizontal scrolling */
+    html, body {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    /* Make sure navigation and menu bar stay inside viewport */
+    nav, .menu-bar, .mobile-menu {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* If any section is too wide, force it to fit */
+    section, div, ul {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .cursor {
+        display: inline-block;
+        width: 5px;       /* fixed width */
+        height: 40px;     /* fixed height */
+        background: #493dbb;
+        border-radius: 3px;
+        margin-left: 5px;
+        margin-bottom: -5px;
+        animation: blink 1s infinite;
     }
 }
