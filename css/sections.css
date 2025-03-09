@@ -52,19 +52,19 @@ footer p {
 }
 
 /* Experience Section */
-#experience .timeline {
+#work-experience .timeline {
     width: 100%;
     position: relative;
 }
 
-#experience .timeline-item {
+#work-experience .timeline-item {
     display: flex;
     align-items: center;
     margin-bottom: 40px;
     width: 100%;
 }
 
-#experience .company-logo {
+#work-experience .company-logo {
     width: 90px;
     height: 110px;
     border-radius: 3px;
@@ -72,16 +72,16 @@ footer p {
     flex-shrink: 0;
 }
 
-#experience .deloitte-logo {
-    width: 130px;
-    height: 60px;
-    border-radius: 3px;
-    margin-right: 5px;
-    margin-left: -25px;
-    flex-shrink: 0;
-}
+##work-experience .deloitte-logo {
+  #  width: 130px;
+ #   height: 60px;
+  #  border-radius: 3px;
+  #  margin-right: 5px;
+  #  margin-left: -25px;
+   # flex-shrink: 0;
+#}
 
-#experience .timeline-content {
+#work-experience .timeline-content {
     background: none;
     box-shadow: none;
     padding: 0;
