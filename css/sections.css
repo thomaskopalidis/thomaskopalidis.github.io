@@ -1,13 +1,203 @@
-/* Section-specific styles */
-section {
-    padding: 100px 20px;
-    text-align: center;
-}
+/* sections.css */
 
+/* Home Section */
 #home {
-    background-color: #2e2e3a;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    max-width: 1200px; /* Prevents it from being too wide */
+    margin: 0 auto; /* Ensures horizontal centering */
+    padding: 20px; /* Prevents content from touching edges */
 }
 
-#about {
-    background-color: #3a3a4a;
+#home p {
+    max-width: 700px;
+    text-align: center;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 2s ease-in-out, opacity 2s ease-in-out;
+    margin: 0 auto;
+}
+
+#home p.visible {
+    transform: translateY(0);
+    opacity: 0.5;
+    margin: 0 auto;
+}
+
+
+
+
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1a1a2e;
+    color: #d3d3d3;
+    font-size: 0.3rem;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    opacity: 0.5;
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+/* Experience Section */
+#experience .timeline {
+    width: 100%;
+    position: relative;
+}
+
+#experience .timeline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+#experience .company-logo {
+    width: 90px;
+    height: 110px;
+    border-radius: 3px;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+#experience .deloitte-logo {
+    width: 130px;
+    height: 60px;
+    border-radius: 3px;
+    margin-right: 5px;
+    margin-left: -25px;
+    flex-shrink: 0;
+}
+
+#experience .timeline-content {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    text-align: left;
+    flex-grow: 1;
+}
+
+/* Research Section */
+#research {
+    text-align: left;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    scroll-margin-top: 120px;
+}
+
+#research .timeline {
+    width: 100%;
+    position: relative;
+}
+
+#research .timeline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+#research .research-logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 3px;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+#research .timeline-content {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    text-align: left;
+    flex-grow: 1;
+}
+
+/* Education Section */
+#education {
+    text-align: left;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    scroll-margin-top: 120px;
+}
+
+#education .timeline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+#education .uni-logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 3px;
+    margin-right: 20px;
+    flex-shrink: 0;
+    display: block;
+}
+
+#education .timeline-content {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    text-align: left;
+    flex-grow: 1;
+}
+
+#education .timeline {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* General Timeline Content */
+.timeline-content p {
+    position: relative;
+    padding-left: 20px; /* Space for the bullet */
+}
+
+.timeline-content p::before {
+    content: "•"; /* Bullet point */
+    position: absolute;
+    left: 0;
+    color: #7d689e;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.timeline-content h3 {
+    margin: 0;
+    color: #7d689e;
+    font-size: 1.5rem;
+}
+
+.timeline-content h4 {
+    margin: 0;
+    color: #d3d3d3;
+    font-size: 1.3rem;
+}
+
+.timeline-content p {
+    margin: 5px 0;
+    color: #d3d3d3;
 }
