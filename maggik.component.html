@@ -1,0 +1,278 @@
+<div class="container">
+    <div class="row" style="justify-content: center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body pb-0">
+                    <h5 class="card-title">{{ "MAGGIC Risk Calculator" | translate }}</h5>
+                    <p>
+                        {{
+                        "The MAGGIC risk score is a simple but powerful risk stratification method. It calculates the
+                        expected all-cause mortality (% probability) at 1 and 3 years for people with heart failure in
+                        relation to an integer risk score ranging from 0 (lowest) to 52 points."
+                        | translate
+                        }}
+                    </p>
+                    <p>
+                        <small>
+                            {{
+                            "Meta-Analysis Global Group in Chronic Heart Failure (MAGGIC), Predicting survival in heart
+                            failure: a risk score based on 39 372 patients from 30 studies, European Heart Journal,
+                            Volume 34, Issue 19, 14 May 2013, Pages 1404–1413,"
+                            | translate
+                            }}
+                            <a href="https://doi.org/10.1093/eurheartj/ehs337"
+                                target="_blank">https://doi.org/10.1093/eurheartj/ehs337</a>
+                        </small>
+                    </p>
+                    <p>
+                        <small>
+                            {{
+                            "Sartipy, U., Dahlström, U., Edner, M. and Lund, L.H. (2014), Predicting survival in heart
+                            failure: validation of the MAGGIC heart failure risk score in 51 043 patients from the
+                            Swedish Heart Failure Registry. Eur J Heart Fail, 16: 173-179."
+                            | translate
+                            }}
+                            <a href="https://doi.org/10.1111/ejhf.32"
+                                target="_blank">https://doi.org/10.1111/ejhf.32</a>
+                        </small>
+                    </p>
+                    <div class="separator"></div>
+                    <form [formGroup]="form" novalidate (submit)="calculate()">
+                        <div class="mb-3">
+                            <div style="width: 100%">
+                                <div>
+                                    <label>
+                                        {{ "Select a patient if you want for the results to be saved on" | translate }}
+                                    </label>
+                                </div>
+                                <p-dropdown [placeholder]="'Select patient' | translate" [autoDisplayFirst]="false"
+                                    [options]="myPatients" [optionLabel]="'fullName'" optionValue="id"
+                                    formControlName="patientId" [showClear]="true"
+                                    (onChange)="onPatientSelect($event.value)" [style]="{width: '100%'}"></p-dropdown>
+                            </div>
+                        </div>
+                        <div class="p-2"></div>
+                        <div class="d-flex">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">{{ "Age" | translate }}</span>
+                            </div>
+                            <input pInputText type="number" step="1" min="18" max="120" [style]="{width: '100%'}"
+                                placeholder="18-120" formControlName="age" />
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon1">{{ "Years" | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="p-1"></div>
+                        <div class="d-flex">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon2">{{ "Ejection Fraction" | translate
+                                    }}</span>
+                            </div>
+                            <input pInputText type="number" step="1" min="1" max="95" type="text" [style]="{width: '100%'}"
+                                placeholder="1-95" formControlName="ejectionFraction" />
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">%</span>
+                            </div>
+                        </div>
+                        <div class="p-1"></div>
+                        <div class="d-flex">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3"> {{ "Systolic Blood Pressure" |
+                                    translate }}</span>
+                            </div>
+                            <input pInputText type="number" step="1" min="50" max="250" type="text" [style]="{width: '100%'}"
+                                placeholder="50-250" formControlName="systolicBloodPressure" />
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon3">mm Hg</span>
+                            </div>
+                        </div>
+                        <div class="p-1"></div>
+                        <div class="d-flex">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon4">{{ "BMI" | translate }}</span>
+                            </div>
+                            <input pInputText type="number" step="1" min="10" max="50" type="text" [style]="{width: '100%'}"
+                                placeholder="10-50" formControlName="bmi" />
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon4">kg/m²</span>
+                            </div>
+                        </div>
+                        <div class="p-1"></div>
+                        <div class="d-flex">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon5">{{ "Creatinine" | translate }}</span>
+                            </div>
+                            <input pInputText type="number" step="1" min="20" max="1200" type="text"
+                                [style]="{width: '100%'}" placeholder="20-1400" formControlName="creatinine" />
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon5">µmol/L</span>
+                            </div>
+                        </div>
+                        <div class="p-1"></div>
+                        <div class="d-flex mb-3">
+                            <label class="flex-grow-1">{{ "NYHA Class" | translate }}</label>
+                            <div>
+                                <button pButton type="button" class="p-button-raised"
+                                    [class.p-button-outlined]="nyhaClass !== '0'" (click)="nyhaClass = '0'">
+                                    {{ "Class I" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button" class="p-button-raised"
+                                    [class.p-button-outlined]="nyhaClass !== '2'" (click)="nyhaClass = '2'">
+                                    {{ "Class II" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button" class="p-button-raised"
+                                    [class.p-button-outlined]="nyhaClass !== '6'" (click)="nyhaClass = '6'">
+                                    {{ "Class III" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button" class="p-button-raised"
+                                    [class.p-button-outlined]="nyhaClass !== '8'" (click)="nyhaClass = '8'">
+                                    {{ "Class IV" | translate }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <label class="flex-grow-1">{{ "Gender" | translate }}</label>
+                            <div>
+                                <button pButton type="button" [class.p-button-outlined]="gender !== '1'"
+                                    (click)="gender = '1'" class="p-button-raised">
+                                    {{ "Male" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button" [class.p-button-outlined]="gender !== '0'"
+                                    (click)="gender = '0'" class="p-button-raised">
+                                    {{ "Female" | translate }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <label class="flex-grow-1">{{ "Active Smoker" | translate }}</label>
+                            <div>
+                                <button pButton type="button" [class.p-button-outlined]="activeSmoker !== '0'"
+                                    (click)="activeSmoker = '0'" class="p-button-raised">
+                                    {{ "No" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button" [class.p-button-outlined]="activeSmoker !== '1'"
+                                    (click)="activeSmoker = '1'" class="p-button-raised">
+                                    {{ "Yes" | translate }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <label class="flex-grow-1">{{ "Diabetes" | translate }}</label>
+                            <div>
+                                <button pButton type="button" [class.p-button-outlined]="diabetes !== '0'"
+                                    (click)="diabetes = '0'" class="p-button-raised">
+                                    {{ "No" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button" [class.p-button-outlined]="diabetes !== '3'"
+                                    (click)="diabetes = '3'" class="p-button-raised">
+                                    {{ "Yes" | translate }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <label class="flex-grow-1">{{ "COPD" | translate }}</label>
+                            <div>
+                                <button pButton type="button" [class.p-button-outlined]="copd !== '0'"
+                                    (click)="copd = '0'" class="p-button-raised">
+                                    {{ "No" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button" [class.p-button-outlined]="copd !== '2'"
+                                    (click)="copd = '2'" class="p-button-raised">
+                                    {{ "Yes" | translate }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <label class="flex-grow-1">{{ "Heart failure first diagnosed ≥18 months ago" | translate
+                                }}</label>
+                            <div>
+                                <button pButton type="button"
+                                    [class.p-button-outlined]="heartFailureFirstDiagnosed !== '2'"
+                                    (click)="heartFailureFirstDiagnosed = '2'" class="p-button-raised">
+                                    {{ "No" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button"
+                                    [class.p-button-outlined]="heartFailureFirstDiagnosed !== '0'"
+                                    (click)="heartFailureFirstDiagnosed = '0'" class="p-button-raised">
+                                    {{ "Yes" | translate }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <label class="flex-grow-1">{{ "Beta Blocker" | translate }}</label>
+                            <div>
+                                <button pButton type="button" [class.p-button-outlined]="betaBlocker !== '3'"
+                                    (click)="betaBlocker = '3'" class="p-button-raised">
+                                    {{ "No" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button" [class.p-button-outlined]="betaBlocker !== '0'"
+                                    (click)="betaBlocker = '0'" class="p-button-raised">
+                                    {{ "Yes" | translate }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <label class="flex-grow-1">{{ "ACEi/ARB" | translate }}</label>
+                            <div>
+                                <button pButton type="button" [class.p-button-outlined]="ace !== '1'"
+                                    (click)="ace = '1'" class="p-button-raised">
+                                    {{ "no" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="button" [class.p-button-outlined]="ace !== '0'"
+                                    (click)="ace = '0'" class="p-button-raised">
+                                    {{ "yes" | translate }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <label class="flex-grow-1"></label>
+                            <div>
+                                <button pButton class="p-button-raised p-button-danger" type="button"
+                                    (click)="clearData()">
+                                    {{ "Clear Data" | translate }}
+                                </button>
+                                <span class="p-1"></span>
+                                <button pButton type="submit" class="p-button-raised">
+                                    {{ "Calculate Risk" | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <ng-container *ngIf="results">
+                        <div class="p-1"></div>
+                        <div class="font-size-18 bold">{{ "MAGGIC Risk Results" | translate }}</div>
+                        <div class="separator"></div>
+                        <div class="p-2"></div>
+                        <div class="mb-3">
+                            <label class="bold" style="display: inline-block; width: 150px">{{ "SCORE" | translate
+                                }}</label>
+                            <label>{{ results?.score }}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label class="bold" style="display: inline-block; width: 150px">
+                                {{ "RISK 1 Year" | translate }}
+                            </label>
+                            <label>{{ results?.risk1Year }}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label class="bold" style="display: inline-block; width: 150px">
+                                {{ "RISK 3 Years" | translate }}
+                            </label>
+                            <label>{{ results?.risk3Years }}</label>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
