@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MAGGIC Risk Calculator - Results</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: auto; }
+        h1 { text-align: center; }
+        .patient {
+            border: 3px solid #4CAF50; /* Πράσινο περίγραμμα */
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9; /* Ελαφρύ γκρι φόντο */
+        }
+        .patient h2 { margin-top: 0; }
+        .score-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #e8f5e9; /* Απαλό πράσινο */
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .score-item {
+            text-align: center;
+            flex: 1;
+        }
+        .score-item strong {
+            font-size: 36px; /* Μεγάλοι αριθμοί */
+            display: block;
+            color: #333;
+        }
+        .score-item span {
+            font-size: 16px;
+            color: #666;
+        }
+        .category {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .category.low { background-color: #ffeb3b; color: #333; }
+        .category.medium { background-color: #ff9800; color: white; }
+        .category.high { background-color: #f44336; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MAGGIC Risk Calculator Results</h1>
+        {% for result in results %}
+            <div class="patient">
+                <div class="inner-box">
+                    <h2>Patient {{ loop.index }}</h2>
+                    <div class="section message">
+                        <strong>Description Sequence:</strong>
+                        <p>{{ result.detailed_description }}</p>
+                    </div>
+                </div>
+                <div class="score-container">
+                    <div class="score-item">
+                        <strong>{{ result.score }}</strong>
+                        <span>MAGGIC Score</span>
+                    </div>
+                    <div class="score-item">
+                        <strong><span class="category {{ result.category|lower }}">{{ result.category }}</span></strong>
+                        <span>Risk Category</span>
+                    </div>
+                    <div class="score-item">
+                        <strong>{{ result.risk1_year }}%</strong>
+                        <span>1-Year Mortality</span>
+                    </div>
+                    <div class="score-item">
+                        <strong>{{ result.risk3_year }}%</strong>
+                        <span>3-Year Mortality</span>
+                    </div>
+                </div>
+                <div class="inner-box">
+                    <div class="section message">
+                        <strong>Message for the Patient:</strong>
+                        <p>{{ result.patient_message }}</p>
+                    </div>
+                    <div class="section message">
+                        <strong>Message for the Doctor:</strong>
+                        <p>{{ result.doctor_message }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <a href="/">Upload New File</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MAGGIC Risk Calculator - Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .container {
+            display: flex;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .left-panel {
+            width: 300px;
+            margin-right: 40px; /* Space between left panel and main content */
+        }
+        .legend-box {
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .legend-box table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .legend-box th,
+        .legend-box td {
+            text-align: left;
+            padding: 8px;
+        }
+        .legend-box th {
+            border-bottom: 2px solid #ccc;
+        }
+        .color-box {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 30px;
+            margin-right: 5px;
+        }
+        .color-yellow { background-color: #ffeb3b; }
+        .color-orange { background-color: #ff9800; }
+        .color-red { background-color: #f44336; }
+
+        .chart-container {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            text-align: center;
+            transition: all 0.3s ease; /* Smooth resizing */
+            cursor: pointer; /* Indicate clickability */
+            margin-bottom: 20px;
+        }
+
+        /* Enlarged Chart Styles */
+        .chart-container.enlarged {
+           position: fixed; /* Makes the enlarged chart follow the user */
+           top: 50%; /* Center vertically */
+           left: 50%; /* Center horizontally */
+           transform: translate(-50%, -50%); /* Adjust positioning to center the chart */
+           width: 90%; /* Larger width */
+           height: auto; /* Maintain aspect ratio */
+           z-index: 1000; /* Bring the chart to the front */
+           background-color: #fff; /* Background to make it prominent */
+           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow for emphasis */
+
+        }
+        .chart-container img {
+            max-width: 100%;
+            transition: all 0.3s ease; /* Smooth resizing for images */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .main-content {
+            flex: 1;
+        }
+        .patient {
+            border: 3px solid #4CAF50; /* Green border */
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9; /* Light gray background */
+        }
+        .inner-box {
+            border: 2px solid #ccc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+        .score-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #e8f5e9; /* Light green */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .score-item {
+            text-align: center;
+            flex: 1;
+        }
+        .score-item strong {
+            font-size: 36px; /* Large numbers */
+            display: block;
+            color: #333;
+        }
+        .score-item span {
+            font-size: 16px;
+            color: #666;
+        }
+        .category {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .category.low { background-color: #ffeb3b; color: #333; }
+        .category.medium { background-color: #ff9800; color: white; }
+        .category.high { background-color: #f44336; color: white; }
+        .message-box p {
+            margin: 10px 0;
+        }
+        .message-box ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        .message-box ul li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel: Legend and Charts -->
+        <div class="left-panel">
+            <div class="legend-box">
+                <table>
+                    <tr>
+                        <th>Maggic Score</th>
+                        <th>Risk Category</th>
+                    </tr>
+                    <tr>
+                        <td>&lt;20</td>
+                        <td><div class="color-box color-yellow"></div> Low Risk</td>
+                    </tr>
+                    <tr>
+                        <td>20 - 30</td>
+                        <td><div class="color-box color-orange"></div> Medium Risk</td>
+                    </tr>
+                    <tr>
+                        <td>&gt;30</td>
+                        <td><div class="color-box color-red"></div> High Risk</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- MAGGIC Scores Chart -->
+            {% if group_chart %}
+            <div class="chart-container" id="chart">
+                <h3>All Participants' MAGGIC Scores</h3>
+                <img src="{{ group_chart }}" alt="MAGGIC Score Chart">
+            </div>
+            {% endif %}
+
+            <!-- BMI Chart -->
+            <div class="chart-container" id="chart-bmi">
+                <h3>BMI Chart</h3>
+                <img src="{{ url_for('static', filename='BMIChart.jpg') }}" alt="BMI Chart">
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1>MAGGIC Risk Calculator Results</h1>
+            {% for result in results %}
+            <div class="patient">
+                <h2>Patient {{ result.patient_data['name'] }}</h2>
+
+                <div class="inner-box">
+                    <strong>Description Sequence:</strong>
+                    <p>{{ result.detailed_description }}</p>
+                </div>
+
+                <div class="inner-box">
+                    <div class="score-container">
+                        <div class="score-item">
+                            <strong>{{ result.score }}</strong>
+                            <span>points</span>
+                        </div>
+                        <div class="score-item">
+                            <strong><span class="category {{ result.category|lower }}">{{ result.category }}</span></strong>
+                            <span>Risk Category</span>
+                        </div>
+                        <div class="score-item">
+                            <strong>{{ result.risk1_year }}%</strong>
+                            <span>1-Year Mortality</span>
+                        </div>
+                        <div class="score-item">
+                            <strong>{{ result.risk3_year }}%</strong>
+                            <span>3-Year Mortality</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inner-box">
+                    <div class="message-box">
+                        <strong>Message for the Patient:</strong>
+                        <p>{{ result.patient_message[0] }}</p>
+                        <strong>Recommendations:</strong>
+                        <ul>
+                            {% for rec in result.patient_message[1] %}
+                            <li>{{ rec }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="inner-box">
+                    <div class="message-box">
+                        <strong>Message for the Doctor:</strong>
+                        <p>{{ result.doctor_message[0] }}</p>
+                        <strong>Recommendations:</strong>
+                        <ul>
+                            {% for rec in result.doctor_message[1] %}
+                            <li>{{ rec }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <a href="/">Upload New File</a>
+        </div>
+    </div>
+
+    <!-- JavaScript for Enlarging Charts -->
+    <script>
+        document.getElementById('chart').addEventListener('click', () => {
+            document.getElementById('chart').classList.toggle('enlarged');
+        });
+
+        document.getElementById('chart-bmi').addEventListener('click', () => {
+            document.getElementById('chart-bmi').classList.toggle('enlarged');
+        });
+    </script>
+</body>
+</html>
