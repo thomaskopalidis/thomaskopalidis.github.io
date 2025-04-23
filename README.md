@@ -45,6 +45,3 @@ All detailed descriptions, messages, and recommendations are exported to a .txt 
  
  
  
-Figure 5. Example of the output for one patient exported in .txt format.
-Here (in fig.5) we have an example of a specific patient, which includes all their characteristics, messages, and recommendations tailored to the patient as well as to their doctor. This process will be repeated for all the patients included in the dataset, with each patient's information being stored and exported in a .txt file.
-.
