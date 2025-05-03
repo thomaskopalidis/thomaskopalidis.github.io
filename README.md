@@ -1,3 +1,4 @@
+For the Project of AI4H
 Medical decision support tool (maggic risk, maggic risk+ etc.)
 General description
 This project is a computational health risk assessment tool designed to calculate patient health risks using the MAGGIC Risk Model initially, and in the future, additional models such as the improved MAGGIC Risk Plus Model. The system is implemented in a user-friendly, web-based environment where users can upload patient data files and receive analytical results.
