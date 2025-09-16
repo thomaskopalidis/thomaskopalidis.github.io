@@ -52,41 +52,70 @@ footer p {
 }
 
 /* Experience Section */
+/* Work experience: image left, text right */
 #work-experience .timeline {
-    width: 100%;
-    position: relative;
+  display: grid;
+  gap: 1.25rem;
 }
 
 #work-experience .timeline-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 40px;
-    width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+#work-experience .timeline-item:last-child {
+  border-bottom: 0;
 }
 
 #work-experience .company-logo {
-    width: 90px;
-    height: 110px;
-    border-radius: 3px;
-    margin-right: 20px;
-    flex-shrink: 0;
+  width: 200px;            /* your desired width */
+  height: auto;
+  flex: 0 0 200px;         /* keeps image column fixed */
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
 }
 
-##work-experience .deloitte-logo {
-  #  width: 130px;
- #   height: 60px;
-  #  border-radius: 3px;
-  #  margin-right: 5px;
-  #  margin-left: -25px;
-   # flex-shrink: 0;
-#}
-
 #work-experience .timeline-content {
-    background: none;
-    box-shadow: none;
-    padding: 0;
-    text-align: left;
-    flex-grow: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#work-experience .timeline-content h3 {
+  margin: 0 0 0.2rem 0;
+  line-height: 1.25;
+}
+
+#work-experience .timeline-content h4 {
+  margin: 0 0 0.6rem 0;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+#work-experience .timeline-content ul {
+  margin: 0.25rem 0 0 1.1rem;
+  padding: 0;
+}
+
+#work-experience .timeline-content li {
+  margin: 0.25rem 0;
+  line-height: 1.5;
+}
+
+/* Stack on small screens */
+@media (max-width: 640px) {
+  #work-experience .timeline-item {
+    flex-direction: column;
+  }
+  #work-experience .company-logo {
+    width: 100%;
+    max-width: 420px;
+    flex-basis: auto;
+  }
 }
 
 /* Research Section */
