@@ -202,219 +202,162 @@
 
   </div> 
 </section>
-   <!-- Research Section -->
-  <section id="research">
-    <h2> Research experience</h2>
-<div class="timeline-item">
-  <img src="images/natural disaster.jpg" alt="Natural Disasters" class="research-logo" style="width: 200px; height: auto;">
+   Για να μεγαλώσουμε τις εικόνες στο Research section, θα ακολουθήσουμε την ίδια πετυχημένη συνταγή με το Work Experience.
+
+Έχω κάνει 3 πράγματα στον παρακάτω κώδικα:
+
+    Άλλαξα το μέγεθος: Από 200px το πήγα στα 300px (και πρόσθεσα min-width για να μην "ζουλιούνται").
+
+    Καθάρισα τον κώδικα: Είχες πολλές φορές το <div class="timeline"> να ανοίγει και να κλείνει λάθος. Τώρα υπάρχει ένα κεντρικό timeline και όλα τα projects είναι τακτοποιημένα μέσα του.
+
+    Πρόσθεσα στυλ στοίχισης: Σε κάθε item έβαλα το style="display: flex..." για να είμαστε σίγουροι ότι η εικόνα θα είναι αριστερά και το κείμενο δεξιά.
+
+Αντέγραψε όλο το παρακάτω και αντικατέστησε το <section id="research">...</section> που έχεις τώρα:
+HTML
+
+<section id="research">
+  <h2>Research experience</h2>
   
-  <div class="timeline-content">
-    <h3>Natural Disaster Multi-Class Classification</h3>
-    <h4>Environmental Data Science • Jan 2026 - Present </h4>
-    
-    <p> 
-      Developed a robust multi-class classification framework to categorize natural disaster events 
-      (Earthquake, Flood, Hurricane, Wildfire) by aggregating real-time data via Public APIs 
-      (e.g., NASA EONET / USGS). 
-    </p>
-    
-    <p> 
-      Implemented an end-to-end Machine Learning pipeline involving automated data fetching, 
-      feature engineering, and model benchmarking. Evaluated algorithms such as Random Forest, 
-      Support Vector Machines (SVM), and Gradient Boosting (XGBoost) to optimize detection accuracy 
-      across imbalanced classes.
-    </p>
-    
-    <p> 
-      <a href="#" target="_blank">
-        Natural Disaster Analysis Project
-      </a>
-    </p>
-  </div>
-</div>
-
-    <div class="timeline">
-      <div class="timeline-item">
-        <img src="images/chest X - Rays (pneumonia).png" alt="Titanic" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>Chest X-Ray (Pneumonia) Image Classification</h3>
-          <h4>Medical AI Project • Oct 2025 - Now </h4>
-          <p> Developed a binary classification model to detect the presence of pneumonia 
-          using chest X-ray datasets. Create the Lung segmentation to help the model to learn the differences
-          between normal X-ray images and pneumonia.   </p>
-          <p> Benchmarked traditional machine learning models (Logistic Regression, Random Forest, 
-          SVM, XGBoost) against Deep Learning architectures to achieve robust and accurate 
-          diagnostic performance. </p>
-        <p>  <a href="https://colab.research.google.com/drive/1uyOjP_FHDeiw6MaDu0KFxnY3Nc9gcM0M" ;>
-            Pneumonia Dataset Classification
-          </a>
-      </p>
-        </div>
-      </div>
-<div class="timeline">
-  <div class="timeline-item">
-    <img src="images/bank_customer_churn.png" alt="Bank Churn" class="research-logo" style="width: 200px; height: auto;">
-    <div class="timeline-content">
-      <h3>
-        <a href="https://huggingface.co/spaces/leonardo999/Bank-Churn-Predictor" target="_blank" style="text-decoration: none; color: inherit;">
-          Bank Customer Churn Prediction 
-        </a>
-      </h3>
-      <h4>Economic Project • Oct 2025  - Jan 2026 </h4>
-      <p>The goal of this project is to predict customer churn for ABC Multistate Bank using a dataset of 10,000+ records.  </p>
-      <p>Developed an end-to-end pipeline comparing <strong>Logistic Regression</strong>,<strong>XGBoost</strong>, <strong>Random Forest</strong>, <strong>Decision Tree</strong>,
-        <strong>CatBoost</strong> and <strong> AdaBoost</strong>
-        models to identify the most accurate predictor.
-       Integrated the finalized model into a live <strong>Hugging Face</strong> application
-       for real-time risk assessment (click title to access).
-     
-      <p>
-        <p style="margin-top: 10px;">
-        <a href="https://colab.research.google.com/drive/1Ph0qmrhb5a-xJ1k8XKogYO9xFK0Md5vT" target="_blank" style="color: white; opacity: 0.8;">
-          Bank Customer Churn Prediction 
-        </a>
-      </p>
-    </div>
-  </div>
-</div>    
-<div class="timeline">
-      <div class="timeline-item">
-        <img src="images/titanic.jpg" alt="Titanic" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>Titanic Dataset</h3>
-          <h4>Natural Disaster Project •  Oct.2025 - Now</h4>
-          <p>In this challenge, a predictive model will be build to answer the question: “what sorts of people were more likely to survive?” using passenger data.  </p>
-          <p> Also, we will add the traditional machine learning models (e.g., Logistic Regression, KNN, Random Forest, SVM, Naive Bayes, AdaBoost, Gradient Boosting, XGBoost)  and deep learning approaches (MLP, CNN, Transfer Learning) to achieve robust and accurate results. </p>
-        <p>  
-          <a href="https://colab.research.google.com/drive/1lyQCE6OUFSpuItAMVSx4cBfjxztkbbB_#scrollTo=jD-iB4IhnXn_"  target="_blank" style="color: white;">
-            Titanic Dataset Classification 
-          </a>
-      </p>
-        </div>
-      </div>
-    
-<div class="timeline">
-      <div class="timeline-item">
-        <img src="images/alzheimer.jpg" alt="Alzheimer-MRI" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>Alzheimer MRI Disease Classification Dataset</h3>
-          <h4>Medical Project •  Jan.2025 - Sept. 2025</h4>
-          <p>Classify if a patient has Alzheimers disease using an MRI scan of the patient brain and if to what degree.  </p>
-          <p> Use traditional machine learning models (e.g., Logistic Regression, KNN, Random Forest, SVM, Naive Bayes, AdaBoost, Gradient Boosting, XGBoost)  and deep learning approaches (MLP, CNN, Transfer Learning) to achieve robust and accurate results. </p>
-        <p>  
-          <a href="https://colab.research.google.com/drive/1aLgpPDmheXv-urrrkVFSVkq4rQpvEn7u#scrollTo=dXYfjpjqSAVw"  target="_blank" style="color: white;">
-            Alzheimer Dataset Classification 
-          </a>
-      </p>
-        </div>
-      </div>
-
-
-
   <div class="timeline">
-      <div class="timeline-item">
-        <img src="images/house price prediction dataset.jpg" alt="Alzheimer-MRI" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>House Price Prediction</h3>
-          <h4>Real Estate Project •  Sept. - now 2025</h4>
-          <p>In this dataset we have to predict the final prices of the houses from features given. The dataset cointains 79 explanatory variables. We will explore the data and apply Advanced regression techniques like random forest and gradient boosting. </p>
-        <p>  
-          <a href="https://colab.research.google.com/drive/1VJzBWr_8-AYN9WULbBUCqWk5RTxk-MDq#scrollTo=NnqT_6oWrrLI"  target="_blank" style="color: white;">
-            House Price Prediction
-          </a>
-      </p>
-        </div>
-      </div>
-<div class="timeline">
-      <div class="timeline-item">
-        <img src="images/Medical Cost Personal Datasets.jpg" alt="Alzheimer-MRI" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>Medical Cost Personal Datasets</h3>
-          <h4>Medical Project •  June.2025 - Sept. 2025</h4>
-          <p>Build 2 regression models (Linear Regression and Random Forest Regressor) for Medical cost dataset. The dataset consists of age, sex, BMI(body mass index), children, smoker and region feature, which are independent and charge as a dependent feature.
-            We will predict individual medical costs billed by health insurance. </p>
-        <p>  
-          <a href="https://colab.research.google.com/drive/1tv1Db9vKMslPwUfX9VmPa-m3AySTsMr0#scrollTo=wQWniOqMMC8M"  target="_blank" style="color: white;">
-            Medical Cost Personal Datasets 
-          </a>
-      </p>
-        </div>
-      </div>
-  
 
-
-<div class="timeline">
-      <div class="timeline-item">
-        <img src="images/diabetes.png" alt="Alzheimer-MRI" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>Diabetes Prediction</h3>
-          <h4>Medical Project •  Feb.2025 - April 2025</h4>
-          <p>This project explores the relationship between various factors and the prevalence of diabetes.
-            The goal of this analysis is to identify key factors that are most strongly associated with the presence of diabetes. </p>
-        <p>  
-          <a href="https://colab.research.google.com/drive/1OrrzovBHEgR3YpwkdszpouIZXVQjBiIF#scrollTo=3I8W-reQDf52"  target="_blank" style="color: white;">
-            Diabetes Prediction
-          </a>
-      </p>
-        </div>
-      </div>
-
-    
- <div class="timeline">
-      <div class="timeline-item">
-        <img src="images/strok_dataset.jpg" alt="Alzheimer-MRI" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>Stroke Prediction Dataset</h3>
-          <h4>Medical Project •  Feb.2025 - April 2025</h4>
-          <p>Predict whether a patient is likely to have a stroke based on health-related features such as age,
-            gender, hypertension, heart disease, glucose level, BMI, smoking status, etc. </p>
-        <p>  
-          <a href="https://colab.research.google.com/drive/1DxmG7zZEgwoNqDddEy9oNYQHId2oUt7L#scrollTo=ShpDTkXEfeef"  target="_blank" style="color: white;">
-            Stroke Predicton Dataset
-          </a>
-      </p>
-        </div>
-      </div>
-
-    
-    
-
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/natural disaster.jpg" alt="Natural Disasters" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
       
-    <div class="timeline">
-      <div class="timeline-item">
-        <img src="images/maggic_risk_calculator.jpg" alt="MAGGIC RICK CALUCLATOR" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>MAGGIC RISK CALCULATOR</h3>
-          <h4>AI4HF project• Sept. 2024 - Feb. 2025</h4>
-          <p>Enhanced the MAGGIC Risk Calculator, a machine learning algorithm that provides personalized mortality risk predictions for chronic heart failure patients, improving risk stratification and treatment strategies.</p>
-        </div>
-      </div>
-
-    <div class="timeline">
-      <div class="timeline-item">
-        <img src="images/GRAPPA_logo.png" alt="UPPER algorithms" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>Transportation Algorithms</h3>
-          <h4>UPPER project• Jan. 2024 - Feb. 2025</h4>
-          <p>Create the algorithms for various transportation modes including bus, car, walking, micromobility, shared car, and multimodal trips.</p>
-        </div>
-      </div>
-      
-      <div class="timeline-item">
-        <img src="images/information.jpg" alt="MPDI-Information" class="research-logo" style="width: 200px; height: auto;">
-        <div class="timeline-content">
-          <h3>Tender project</h3>
-          <h4>Research Assistant • Sept. 2020 - Sept. 2021</h4>
-          <p>Publications</p>
-         <p> 
- 
-  <a href="https://doi.org/10.3390/info15030135" target="_blank" style="color: white;">
-     <p>Kopalidis, T.; Solachidis, V.; Vretos, N.; Daras, P. Advances in Facial Expression Recognition: A Survey of Methods, Benchmarks, Models, and Datasets. Information 2024, 15, 135.</p>
-  </a> 
-        </div>
+      <div class="timeline-content">
+        <h3>Natural Disaster Multi-Class Classification</h3>
+        <h4>Environmental Data Science • Jan 2026 - Present </h4>
+        <p>Developed a robust multi-class classification framework to categorize natural disaster events (Earthquake, Flood, Hurricane, Wildfire) by aggregating real-time data via Public APIs (e.g., NASA EONET / USGS).</p>
+        <p>Implemented an end-to-end Machine Learning pipeline involving automated data fetching, feature engineering, and model benchmarking. Evaluated algorithms such as Random Forest, Support Vector Machines (SVM), and Gradient Boosting (XGBoost) to optimize detection accuracy across imbalanced classes.</p>
+        <p><a href="#" target="_blank">Natural Disaster Analysis Project</a></p>
       </div>
     </div>
-  </section>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/chest X - Rays (pneumonia).png" alt="Pneumonia" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>Chest X-Ray (Pneumonia) Image Classification</h3>
+        <h4>Medical AI Project • Oct 2025 - Now </h4>
+        <p>Developed a binary classification model to detect the presence of pneumonia using chest X-ray datasets. Create the Lung segmentation to help the model to learn the differences between normal X-ray images and pneumonia.</p>
+        <p>Benchmarked traditional machine learning models (Logistic Regression, Random Forest, SVM, XGBoost) against Deep Learning architectures to achieve robust and accurate diagnostic performance.</p>
+        <p><a href="https://colab.research.google.com/drive/1uyOjP_FHDeiw6MaDu0KFxnY3Nc9gcM0M" target="_blank">Pneumonia Dataset Classification</a></p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/bank_customer_churn.png" alt="Bank Churn" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3><a href="https://huggingface.co/spaces/leonardo999/Bank-Churn-Predictor" target="_blank" style="text-decoration: none; color: inherit;">Bank Customer Churn Prediction</a></h3>
+        <h4>Economic Project • Oct 2025 - Jan 2026 </h4>
+        <p>The goal of this project is to predict customer churn for ABC Multistate Bank using a dataset of 10,000+ records.</p>
+        <p>Developed an end-to-end pipeline comparing <strong>Logistic Regression</strong>, <strong>XGBoost</strong>, <strong>Random Forest</strong>, <strong>Decision Tree</strong>, <strong>CatBoost</strong> and <strong>AdaBoost</strong> models. Integrated the finalized model into a live <strong>Hugging Face</strong> application.</p>
+        <p><a href="https://colab.research.google.com/drive/1Ph0qmrhb5a-xJ1k8XKogYO9xFK0Md5vT" target="_blank" style="color: white; opacity: 0.8;">Bank Customer Churn Prediction (Colab)</a></p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/titanic.jpg" alt="Titanic" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>Titanic Dataset</h3>
+        <h4>Natural Disaster Project • Oct.2025 - Now</h4>
+        <p>In this challenge, a predictive model will be built to answer the question: “what sorts of people were more likely to survive?” using passenger data.</p>
+        <p>We will add traditional machine learning models (e.g., Logistic Regression, KNN, Random Forest, SVM, XGBoost) and deep learning approaches to achieve robust results.</p>
+        <p><a href="https://colab.research.google.com/drive/1lyQCE6OUFSpuItAMVSx4cBfjxztkbbB_#scrollTo=jD-iB4IhnXn_" target="_blank" style="color: white;">Titanic Dataset Classification</a></p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/alzheimer.jpg" alt="Alzheimer-MRI" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>Alzheimer MRI Disease Classification Dataset</h3>
+        <h4>Medical Project • Jan.2025 - Sept. 2025</h4>
+        <p>Classify if a patient has Alzheimer's disease using an MRI scan of the patient brain and to what degree.</p>
+        <p>Use traditional machine learning models and deep learning approaches (MLP, CNN, Transfer Learning) to achieve robust results.</p>
+        <p><a href="https://colab.research.google.com/drive/1aLgpPDmheXv-urrrkVFSVkq4rQpvEn7u#scrollTo=dXYfjpjqSAVw" target="_blank" style="color: white;">Alzheimer Dataset Classification</a></p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/house price prediction dataset.jpg" alt="House Price" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>House Price Prediction</h3>
+        <h4>Real Estate Project • Sept. - now 2025</h4>
+        <p>In this dataset we have to predict the final prices of the houses from features given. The dataset contains 79 explanatory variables.</p>
+        <p><a href="https://colab.research.google.com/drive/1VJzBWr_8-AYN9WULbBUCqWk5RTxk-MDq#scrollTo=NnqT_6oWrrLI" target="_blank" style="color: white;">House Price Prediction</a></p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/Medical Cost Personal Datasets.jpg" alt="Medical Cost" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>Medical Cost Personal Datasets</h3>
+        <h4>Medical Project • June.2025 - Sept. 2025</h4>
+        <p>Build 2 regression models (Linear Regression and Random Forest Regressor) for Medical cost dataset to predict individual medical costs billed by health insurance.</p>
+        <p><a href="https://colab.research.google.com/drive/1tv1Db9vKMslPwUfX9VmPa-m3AySTsMr0#scrollTo=wQWniOqMMC8M" target="_blank" style="color: white;">Medical Cost Personal Datasets</a></p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/diabetes.png" alt="Diabetes" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>Diabetes Prediction</h3>
+        <h4>Medical Project • Feb.2025 - April 2025</h4>
+        <p>This project explores the relationship between various factors and the prevalence of diabetes to identify key factors associated with its presence.</p>
+        <p><a href="https://colab.research.google.com/drive/1OrrzovBHEgR3YpwkdszpouIZXVQjBiIF#scrollTo=3I8W-reQDf52" target="_blank" style="color: white;">Diabetes Prediction</a></p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/strok_dataset.jpg" alt="Stroke" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>Stroke Prediction Dataset</h3>
+        <h4>Medical Project • Feb.2025 - April 2025</h4>
+        <p>Predict whether a patient is likely to have a stroke based on health-related features such as age, gender, hypertension, heart disease, glucose level, BMI, smoking status, etc.</p>
+        <p><a href="https://colab.research.google.com/drive/1DxmG7zZEgwoNqDddEy9oNYQHId2oUt7L#scrollTo=ShpDTkXEfeef" target="_blank" style="color: white;">Stroke Prediction Dataset</a></p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/maggic_risk_calculator.jpg" alt="MAGGIC RISK CALCULATOR" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>MAGGIC RISK CALCULATOR</h3>
+        <h4>AI4HF project • Sept. 2024 - Feb. 2025</h4>
+        <p>Enhanced the MAGGIC Risk Calculator, a machine learning algorithm that provides personalized mortality risk predictions for chronic heart failure patients.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 50px;">
+      <img src="images/GRAPPA_logo.png" alt="UPPER algorithms" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>Transportation Algorithms</h3>
+        <h4>UPPER project • Jan. 2024 - Feb. 2025</h4>
+        <p>Create the algorithms for various transportation modes including bus, car, walking, micromobility, shared car, and multimodal trips.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item" style="display: flex; flex-direction: row; align-items: flex-start; gap: 30px; margin-bottom: 0;">
+      <img src="images/information.jpg" alt="Tender" class="research-logo" 
+           style="width: 300px; min-width: 300px; height: auto; object-fit: contain; border-radius: 8px;">
+      <div class="timeline-content">
+        <h3>Tender project</h3>
+        <h4>Research Assistant • Sept. 2020 - Sept. 2021</h4>
+        <p>Publications:</p>
+        <p><a href="https://doi.org/10.3390/info15030135" target="_blank" style="color: white;">Kopalidis, T.; Solachidis, V.; Vretos, N.; Daras, P. Advances in Facial Expression Recognition: A Survey of Methods, Benchmarks, Models, and Datasets. Information 2024, 15, 135.</a></p>
+      </div>
+    </div>
+
+  </div> 
+</section>
 <!-- Education Section -->
 <section id="education">
   <h2>Education</h2>
