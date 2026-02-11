@@ -1,6 +1,6 @@
-/* sections.css */
+/* sections.css - FINAL CLEAN VERSION */
 
-/* Home Section */
+/* --- HOME SECTION --- */
 #home {
     display: flex;
     flex-direction: column;
@@ -8,9 +8,9 @@
     align-items: center;
     height: 100vh;
     width: 100%;
-    max-width: 1200px; /* Prevents it from being too wide */
-    margin: 0 auto; /* Ensures horizontal centering */
-    padding: 20px; /* Prevents content from touching edges */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 #home p {
@@ -28,11 +28,7 @@
     margin: 0 auto;
 }
 
-
-
-
-
-/* Footer */
+/* --- FOOTER --- */
 footer {
     text-align: center;
     padding: 20px;
@@ -51,55 +47,59 @@ footer p {
     margin-bottom: 0;
 }
 
-/* Experience Section */
-/* Experience Section - UPDATED */
+/* --- UNIVERSAL TIMELINE LAYOUT (Work, Research, Education) --- */
+/* Αυτό φτιάχνει τη διάταξη: Εικόνα Αριστερά - Κείμενο Δεξιά */
 
-/* --- UNIVERSAL TIMELINE STYLES (Work & Research) --- */
-
-/* Γενικό Container */
-.timeline {
+/* Γενικό Container για κάθε ενότητα */
+#work-experience .timeline,
+#research .timeline,
+#education .timeline {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-/* Το κουτί κάθε Project (Work & Research) */
+/* Το κουτί κάθε Project */
 .timeline-item {
-    display: flex;             /* Ενεργοποιεί τη διάταξη δίπλα-δίπλα */
-    flex-direction: row;       /* Σιγουρεύει ότι είναι οριζόντια */
-    align-items: flex-start;   /* Στοιχίζει την εικόνα πάνω-αριστερά */
-    gap: 30px;                 /* Κενό ανάμεσα στην εικόνα και το κείμενο */
-    margin-bottom: 50px;       /* Κενό κάτω από κάθε project */
+    display: flex !important;           /* SOS: Ενεργοποιεί τη διάταξη */
+    flex-direction: row !important;     /* SOS: Τα βάζει οριζόντια */
+    align-items: flex-start !important; /* Ευθυγράμμιση πάνω */
+    gap: 30px !important;               /* Κενό ανάμεσα σε εικόνα και κείμενο */
+    margin-bottom: 50px !important;     
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
 }
 
-/* Αφαίρεση γραμμής στο τελευταίο */
 .timeline-item:last-child {
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
     border-bottom: none;
 }
 
-/* --- ΡΥΘΜΙΣΗ ΕΙΚΟΝΩΝ (Η ΛΥΣΗ ΓΙΑ ΤΑ ΜΕΓΕΘΗ) --- */
-/* Πιάνει ΟΛΕΣ τις εικόνες μέσα σε timeline (logo, research images, κλπ) */
+/* --- ΡΥΘΜΙΣΗ ΕΙΚΟΝΩΝ (FIX ΓΙΑ ΤΑ ΜΕΓΕΘΗ) --- */
+/* Πιάνει ΟΛΕΣ τις εικόνες μέσα στα timelines */
 .timeline-item img, 
 .company-logo,
-.research-logo {
-    width: 150px !important;   /* Σταθερό μικρό πλάτος */
-    height: auto;              /* Αυτόματο ύψος */
-    flex-shrink: 0;            /* Απαγορεύει στην εικόνα να αλλοιωθεί */
-    object-fit: contain;       /* Η εικόνα φαίνεται ολόκληρη */
+.research-logo,
+.uni-logo {
+    width: 150px !important;     /* Σταθερό μικρό πλάτος */
+    height: auto !important;     
+    flex-shrink: 0 !important;   /* Απαγορεύει να "ζουληχτεί" η εικόνα */
+    object-fit: contain !important;
     border-radius: 8px;
     background: rgba(255,255,255,0.02);
-    margin-top: 5px;           /* Μικρή διόρθωση για να ευθυγραμμιστεί με το κείμενο */
+    margin-top: 5px;             /* Ευθυγράμμιση με την πρώτη γραμμή κειμένου */
+    margin-right: 0 !important;  /* Το κενό ορίζεται από το gap */
 }
 
-/* Ρυθμίσεις Κειμένου */
+/* --- ΡΥΘΜΙΣΗ ΚΕΙΜΕΝΟΥ --- */
 .timeline-content {
-    flex-grow: 1;              /* Πιάνει τον υπόλοιπο χώρο δεξιά */
+    flex-grow: 1;                /* Πιάνει τον υπόλοιπο χώρο */
     min-width: 0;
+    text-align: left;
 }
 
+/* --- ΤΙΤΛΟΙ & ΛΙΣΤΕΣ --- */
 .timeline-content h3 {
     margin-top: 0;
     margin-bottom: 5px;
@@ -113,112 +113,20 @@ footer p {
     font-weight: 600;
     opacity: 0.8;
     font-size: 1.1rem;
+    color: #d3d3d3;
 }
 
-/* --- MOBILE (ΚΙΝΗΤΑ) --- */
-@media (max-width: 768px) {
-    .timeline-item {
-        flex-direction: column; /* Κάθετη διάταξη στα κινητά */
-        align-items: center;
-        text-align: center;
-    }
-
-    .timeline-item img, 
-    .company-logo,
-    .research-logo {
-        width: 120px !important; /* Ακόμα πιο μικρό στα κινητά */
-        margin-bottom: 20px;
-    }
-}
-/* Research Section */
-#research {
-    text-align: left;
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    scroll-margin-top: 120px;
-}
-
-#research .timeline {
-    width: 100%;
-    position: relative;
-}
-
-#research .timeline-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 40px;
-    width: 100%;
-}
-
-#research .research-logo {
-    width: 100px;
-    height: 100px;
-    border-radius: 3px;
-    margin-right: 20px;
-    flex-shrink: 0;
-}
-
-#research .timeline-content {
-    background: none;
-    box-shadow: none;
-    padding: 0;
-    text-align: left;
-    flex-grow: 1;
-}
-
-/* Education Section */
-#education {
-    text-align: left;
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    scroll-margin-top: 120px;
-}
-
-#education .timeline-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 40px;
-    width: 100%;
-}
-
-#education .uni-logo {
-    width: 100px;
-    height: 100px;
-    border-radius: 3px;
-    margin-right: 20px;
-    flex-shrink: 0;
-    display: block;
-}
-
-#education .timeline-content {
-    background: none;
-    box-shadow: none;
-    padding: 0;
-    text-align: left;
-    flex-grow: 1;
-}
-
-#education .timeline {
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-/* General Timeline Content */
 .timeline-content p {
     position: relative;
-    padding-left: 20px; /* Space for the bullet */
+    padding-left: 20px;
+    margin: 5px 0;
+    color: #d3d3d3;
+    line-height: 1.5;
 }
 
+/* Bullets */
 .timeline-content p::before {
-    content: "•"; /* Bullet point */
+    content: "•";
     position: absolute;
     left: 0;
     color: #7d689e;
@@ -226,19 +134,46 @@ footer p {
     font-weight: bold;
 }
 
-.timeline-content h3 {
-    margin: 0;
-    color: #7d689e;
-    font-size: 1.5rem;
+/* --- SECTION SPECIFIC LAYOUTS (Container Widths only) --- */
+/* Εδώ κρατάμε μόνο το πλάτος και τα margins, ΟΧΙ τη διάταξη των items */
+
+#research, #education {
+    text-align: left;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    scroll-margin-top: 120px;
 }
 
-.timeline-content h4 {
-    margin: 0;
-    color: #d3d3d3;
-    font-size: 1.3rem;
-}
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 768px) {
+    .timeline-item {
+        flex-direction: column !important; /* Κάθετα στα κινητά */
+        align-items: center !important;
+        text-align: center !important;
+    }
 
-.timeline-content p {
-    margin: 5px 0;
-    color: #d3d3d3;
+    .timeline-item img, 
+    .company-logo,
+    .research-logo,
+    .uni-logo {
+        width: 120px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .timeline-content {
+        text-align: center !important;
+    }
+    
+    .timeline-content p {
+        padding-left: 0; /* Αφαίρεση εσοχής στα κινητά για κεντράρισμα */
+    }
+    
+    .timeline-content p::before {
+        position: relative;
+        left: auto;
+        margin-right: 5px;
+    }
 }
