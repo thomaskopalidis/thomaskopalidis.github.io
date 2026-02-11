@@ -52,72 +52,80 @@ footer p {
 }
 
 /* Experience Section */
-/* Work experience: image left, text right */
+/* Experience Section - UPDATED */
+
 #work-experience .timeline {
-  display: grid;
-  gap: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
+/* Το βασικό κουτί για κάθε Project */
 #work-experience .timeline-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;             /* Ενεργοποιεί τη διάταξη δίπλα-δίπλα */
+    align-items: flex-start;   /* Στοιχίζει το λογότυπο στην αρχή (πάνω) του κειμένου */
+    gap: 30px;                 /* Κενό ανάμεσα στο Λογότυπο και το Κείμενο */
+    margin-bottom: 50px;       /* ΜΕΓΑΛΟ ΚΕΝΟ κάτω από κάθε project (Breathing Room) */
+    padding-bottom: 20px;      /* Λίγο "αέρα" εσωτερικά */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Αχνή γραμμή διαχωρισμού */
 }
 
+/* Αφαιρούμε το περιθώριο από το τελευταίο project για να μην αφήνει κενό στο τέλος */
 #work-experience .timeline-item:last-child {
-  border-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
 }
 
+/* Ρυθμίσεις Λογότυπου */
 #work-experience .company-logo {
-  width: 200px;            /* your desired width */
-  height: auto;
-  flex: 0 0 200px;         /* keeps image column fixed */
-  object-fit: contain;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.02);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    width: 180px;              /* Σταθερό πλάτος */
+    height: auto;              /* Αυτόματο ύψος για να μην παραμορφώνεται */
+    flex-shrink: 0;            /* SOS: Απαγορεύει στο λογότυπο να "ζουληχτεί" */
+    object-fit: contain;
+    border-radius: 8px;        /* Ελαφρώς στρογγυλεμένες γωνίες */
+    background: rgba(255,255,255,0.02); /* Προαιρετικό φόντο πίσω από το logo */
 }
 
+/* Ρυθμίσεις Κειμένου */
 #work-experience .timeline-content {
-  flex: 1 1 auto;
-  min-width: 0;
+    flex-grow: 1;              /* Το κείμενο πιάνει όλο τον διαθέσιμο χώρο δεξιά */
+    min-width: 0;              /* Αποτρέπει προβλήματα υπερχείλισης */
 }
 
+/* Στυλ για Τίτλους και Λίστες μέσα στο Experience */
 #work-experience .timeline-content h3 {
-  margin: 0 0 0.2rem 0;
-  line-height: 1.25;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 1.4rem;
+    color: #7d689e; /* Το μωβ χρώμα σου */
 }
 
 #work-experience .timeline-content h4 {
-  margin: 0 0 0.6rem 0;
-  opacity: 0.8;
-  font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 600;
+    opacity: 0.8;
+    font-size: 1.1rem;
 }
 
-#work-experience .timeline-content ul {
-  margin: 0.25rem 0 0 1.1rem;
-  padding: 0;
-}
+/* Responsive - Για κινητά τηλέφωνα */
+@media (max-width: 768px) {
+    #work-experience .timeline-item {
+        flex-direction: column; /* Τα βάζει κάθετα (logo πάνω, κείμενο κάτω) */
+        align-items: center;    /* Κεντράρισμα */
+        text-align: center;
+    }
 
-#work-experience .timeline-content li {
-  margin: 0.25rem 0;
-  line-height: 1.5;
+    #work-experience .company-logo {
+        width: 140px;           /* Μικρότερο logo στα κινητά */
+        margin-bottom: 20px;    /* Κενό ανάμεσα σε logo και κείμενο στο κινητό */
+    }
+    
+    #work-experience .timeline-content p::before {
+        position: relative; /* Διόρθωση για τις τελείες στα bullets στο κεντράρισμα */
+        content: "";        /* Ή μπορείς να τις αφαιρέσεις τελείως στα κινητά αν θες */
+    }
 }
-
-/* Stack on small screens */
-@media (max-width: 640px) {
-  #work-experience .timeline-item {
-    flex-direction: column;
-  }
-  #work-experience .company-logo {
-    width: 100%;
-    max-width: 420px;
-    flex-basis: auto;
-  }
-}
-
 /* Research Section */
 #research {
     text-align: left;
