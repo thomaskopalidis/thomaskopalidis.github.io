@@ -54,53 +54,69 @@ footer p {
 /* Experience Section */
 /* Experience Section - UPDATED */
 
-#work-experience .timeline {
+Το πρόβλημα στον κώδικα που μου έστειλες είναι ότι χρησιμοποιείς το #work-experience μπροστά από κάθε εντολή. Αυτό σημαίνει ότι οι ρυθμίσεις εφαρμόζονται ΜΟΝΟ στην ενότητα "Work experience".
+
+Οι άλλες ενότητες (όπως το Research, Intrepid, TeNDER κλπ) δεν παίρνουν αυτές τις εντολές, γι' αυτό οι εικόνες βγαίνουν τεράστιες και το κείμενο από κάτω.
+
+Διέγραψε όλο το μπλοκ που μου έστειλες και βάλε αυτόν τον διορθωμένο κώδικα.
+
+Έχω αφαιρέσει το #work-experience ώστε να πιάνει ΠΑΝΤΟΥ (και στο Research και στο Experience) και πρόσθεσα εντολή για να μικραίνει κάθε εικόνα μέσα στο timeline.
+CSS
+
+/* --- UNIVERSAL TIMELINE STYLES (Work & Research) --- */
+
+/* Γενικό Container */
+.timeline {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-/* Το βασικό κουτί για κάθε Project */
-#work-experience .timeline-item {
+/* Το κουτί κάθε Project (Work & Research) */
+.timeline-item {
     display: flex;             /* Ενεργοποιεί τη διάταξη δίπλα-δίπλα */
-    align-items: flex-start;   /* Στοιχίζει το λογότυπο στην αρχή (πάνω) του κειμένου */
-    gap: 30px;                 /* Κενό ανάμεσα στο Λογότυπο και το Κείμενο */
-    margin-bottom: 50px;       /* ΜΕΓΑΛΟ ΚΕΝΟ κάτω από κάθε project (Breathing Room) */
-    padding-bottom: 20px;      /* Λίγο "αέρα" εσωτερικά */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Αχνή γραμμή διαχωρισμού */
+    flex-direction: row;       /* Σιγουρεύει ότι είναι οριζόντια */
+    align-items: flex-start;   /* Στοιχίζει την εικόνα πάνω-αριστερά */
+    gap: 30px;                 /* Κενό ανάμεσα στην εικόνα και το κείμενο */
+    margin-bottom: 50px;       /* Κενό κάτω από κάθε project */
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Αφαιρούμε το περιθώριο από το τελευταίο project για να μην αφήνει κενό στο τέλος */
-#work-experience .timeline-item:last-child {
+/* Αφαίρεση γραμμής στο τελευταίο */
+.timeline-item:last-child {
     margin-bottom: 0;
     border-bottom: none;
 }
 
-/* Ρυθμίσεις Λογότυπου */
-#work-experience .company-logo {
-    width: 180px;              /* Σταθερό πλάτος */
-    height: auto;              /* Αυτόματο ύψος για να μην παραμορφώνεται */
-    flex-shrink: 0;            /* SOS: Απαγορεύει στο λογότυπο να "ζουληχτεί" */
-    object-fit: contain;
-    border-radius: 8px;        /* Ελαφρώς στρογγυλεμένες γωνίες */
-    background: rgba(255,255,255,0.02); /* Προαιρετικό φόντο πίσω από το logo */
+/* --- ΡΥΘΜΙΣΗ ΕΙΚΟΝΩΝ (Η ΛΥΣΗ ΓΙΑ ΤΑ ΜΕΓΕΘΗ) --- */
+/* Πιάνει ΟΛΕΣ τις εικόνες μέσα σε timeline (logo, research images, κλπ) */
+.timeline-item img, 
+.company-logo,
+.research-logo {
+    width: 150px !important;   /* Σταθερό μικρό πλάτος */
+    height: auto;              /* Αυτόματο ύψος */
+    flex-shrink: 0;            /* Απαγορεύει στην εικόνα να αλλοιωθεί */
+    object-fit: contain;       /* Η εικόνα φαίνεται ολόκληρη */
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    margin-top: 5px;           /* Μικρή διόρθωση για να ευθυγραμμιστεί με το κείμενο */
 }
 
 /* Ρυθμίσεις Κειμένου */
-#work-experience .timeline-content {
-    flex-grow: 1;              /* Το κείμενο πιάνει όλο τον διαθέσιμο χώρο δεξιά */
-    min-width: 0;              /* Αποτρέπει προβλήματα υπερχείλισης */
+.timeline-content {
+    flex-grow: 1;              /* Πιάνει τον υπόλοιπο χώρο δεξιά */
+    min-width: 0;
 }
 
-/* Στυλ για Τίτλους και Λίστες μέσα στο Experience */
-#work-experience .timeline-content h3 {
+.timeline-content h3 {
     margin-top: 0;
     margin-bottom: 5px;
     font-size: 1.4rem;
-    color: #7d689e; /* Το μωβ χρώμα σου */
+    color: #7d689e;
 }
 
-#work-experience .timeline-content h4 {
+.timeline-content h4 {
     margin-top: 0;
     margin-bottom: 15px;
     font-weight: 600;
@@ -108,22 +124,19 @@ footer p {
     font-size: 1.1rem;
 }
 
-/* Responsive - Για κινητά τηλέφωνα */
+/* --- MOBILE (ΚΙΝΗΤΑ) --- */
 @media (max-width: 768px) {
-    #work-experience .timeline-item {
-        flex-direction: column; /* Τα βάζει κάθετα (logo πάνω, κείμενο κάτω) */
-        align-items: center;    /* Κεντράρισμα */
+    .timeline-item {
+        flex-direction: column; /* Κάθετη διάταξη στα κινητά */
+        align-items: center;
         text-align: center;
     }
 
-    #work-experience .company-logo {
-        width: 140px;           /* Μικρότερο logo στα κινητά */
-        margin-bottom: 20px;    /* Κενό ανάμεσα σε logo και κείμενο στο κινητό */
-    }
-    
-    #work-experience .timeline-content p::before {
-        position: relative; /* Διόρθωση για τις τελείες στα bullets στο κεντράρισμα */
-        content: "";        /* Ή μπορείς να τις αφαιρέσεις τελείως στα κινητά αν θες */
+    .timeline-item img, 
+    .company-logo,
+    .research-logo {
+        width: 120px !important; /* Ακόμα πιο μικρό στα κινητά */
+        margin-bottom: 20px;
     }
 }
 /* Research Section */
