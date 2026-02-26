@@ -117,6 +117,7 @@
         .layer-btn[data-layer="aqi"]{--active-color:#8e24aa;--active-bg:rgba(142,36,170,0.1)}
         .layer-btn[data-layer="ships"]{--active-color:#0d47a1;--active-bg:rgba(13,71,161,0.1)}
         .layer-btn[data-layer="pollen-overlay"]{--active-color:#689f38;--active-bg:rgba(104,159,56,0.1)}
+        .layer-btn[data-layer="radiation"]{--active-color:#ff9800;--active-bg:rgba(255,152,0,0.1)}
         .color-legend{margin-bottom:8px;padding:9px 10px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:10px;display:none;animation:fadeIn 0.3s}
         .color-legend.visible{display:block}
         @keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
@@ -239,6 +240,7 @@
             0% { width: 10px; height: 10px; opacity: 1; }
             100% { width: 120px; height: 120px; opacity: 0; }
         }
+
     /* --- ΕΛΑΧΙΣΤΟΠΟΙΗΣΗ UI PANEL --- */
 .minimize-btn { width:32px; height:32px; border-radius:8px; border:1px solid var(--border); background:var(--bg-layer); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; transition:all 0.2s; margin-left:4px; }
 .minimize-btn:hover { background:var(--bg-layer-hover); transform:scale(1.05); }
@@ -260,6 +262,20 @@
 .bot-input-area input { flex:1; padding:10px 14px; border-radius:20px; border:1px solid var(--border); background:var(--bg-input); color:var(--text-primary); font-family:'DM Sans',sans-serif; font-size:12px; outline:none; }
 .bot-input-area input:focus { border-color:var(--accent); }
 .bot-input-area button { background:var(--accent); color:#fff; border:none; width:36px; height:36px; border-radius:50%; margin-left:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+/* Webcams Styling */
+        .webcam-popup { width: 280px; }
+        .webcam-img { width: 100%; border-radius: 8px; margin-top: 5px; }
+        .space-alert-active { color: #ff9800; font-weight: bold; animation: pulse-dot 2s infinite; }
+/* --- NEW FEATURES CSS --- */
+        .news-feed { margin-top: 10px; border-top: 1px solid var(--border-light); padding-top: 10px; }
+        .news-item { margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid var(--border-light); font-size: 10px; line-height: 1.3; }
+        .news-item a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
+        .news-item a:hover { color: var(--accent); }
+        .time-machine-container { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000; background: var(--bg-panel); backdrop-filter: blur(16px); padding: 10px 20px; border-radius: 20px; display: flex; align-items: center; gap: 15px; box-shadow: var(--shadow); border: 1px solid var(--border-light); width: 90%; max-width: 400px; transition: all 0.3s; }
+        .time-machine-container input[type=range] { flex: 1; accent-color: var(--accent); }
+        .safe-btn { margin-top: 8px; width: 100%; padding: 8px; background: rgba(76, 175, 80, 0.1); color: #2e7d32; border: 1px solid rgba(76, 175, 80, 0.3); border-radius: 8px; cursor: pointer; font-size: 10px; font-weight: bold; font-family: 'JetBrains Mono', monospace; transition: all 0.2s; }
+        .safe-btn:hover { background: rgba(76, 175, 80, 0.2); }
+        [data-theme="dark"] .safe-btn { color: #66bb6a; }   
     </style>
 
 </head>
@@ -304,6 +320,7 @@
                 <button class="layer-btn" data-layer="pressure" onclick="toggleW('pressure')"><span class="icon">⏱️</span>Pressure<span class="layer-desc">hPa</span></button>
                 <button class="layer-btn" data-layer="thunder" onclick="toggleThunder()"><span class="icon">⚡</span>Thunder<span class="layer-desc">Live</span></button>
                 <button class="layer-btn" data-layer="dust" onclick="toggleDust()" style="grid-column:span 2"><span class="icon">🌫️</span>Dust<span class="layer-desc">Saharan Dust</span></button>
+                <button class="layer-btn" data-layer="webcams" onclick="toggleWebcams()"><span class="icon">📷</span>Webcams<span class="layer-desc">Live View</span></button>
             </div>
             <div id="legend-rain" class="color-legend"><div class="legend-header">🌧️ Precipitation</div><div class="color-bar" style="background:linear-gradient(to right,transparent,#c8e6ff 10%,#64b5f6 25%,#1976d2 40%,#ffeb3b 65%,#ff9800 75%,#f44336 85%,#b71c1c)"></div><div class="color-labels"><span>0</span><span>0.5</span><span>5</span><span>10</span><span>20</span><span>50+</span></div></div>
             <div id="legend-humidity" class="color-legend"><div class="legend-header">💧 Humidity %</div></div>
@@ -323,6 +340,12 @@
             </div>
         </div>
         <div class="tab-content" id="content-disaster">
+            <div class="section-label">☄️ Space Threats (NASA Live)</div>
+            <div class="space-box" id="nasa-stats">
+            <div id="asteroid-info">Loading NASA Objects...</div>
+            <hr style="opacity:0.1; margin:8px 0;">
+            <div id="solar-info">Checking Solar Winds (Kp Index)...</div>
+            </div>
             <div class="section-label">⏱️ Time Range</div>
             <div class="time-range-bar">
                 <button class="time-range-btn active" data-range="1" onclick="setTimeRange(1)">24h<span class="range-label">Day</span></button>
@@ -352,6 +375,10 @@
                 <div class="stat-card"><div class="stat-icon">🌀</div><div class="stat-number" id="statHurricanes">—</div><div class="stat-label">Hurricanes</div></div>
                 <div class="stat-card"><div class="stat-icon">🌊</div><div class="stat-number" id="statFloods">—</div><div class="stat-label">Floods</div></div>
             </div>
+            <div class="news-feed">
+                <div class="section-label">📢 Breaking Disaster News</div>
+                <div id="news-container"><div class="loading-inline"><div class="loading-spinner"></div> Loading news...</div></div>
+            </div>
         </div>
         <div class="tab-content" id="content-traffic">
             <div class="section-label">Traffic & Transport</div>
@@ -379,6 +406,8 @@
                 <div class="stat-card"><div class="stat-icon">🛴</div><div class="stat-number" id="statScooters">—</div><div class="stat-label">Bikes</div></div>
                 <div class="stat-card"><div class="stat-icon">✈️</div><div class="stat-number" id="statFlights">—</div><div class="stat-label">Flights</div></div>
                 <div class="stat-card"><div class="stat-icon">🚢</div><div class="stat-number" id="statShips">—</div><div class="stat-label">Ships</div></div>
+                <div class="stat-card"><div class="stat-icon">🛰️</div><div class="stat-number" id="statISS">—</div><div class="stat-label">ISS Speed</div></div>
+
             </div>
         </div>
         <div class="tab-content" id="content-health">
@@ -386,9 +415,16 @@
             <div class="layers-grid">
                 <button class="layer-btn" data-layer="aqi" onclick="toggleW('aqi')"><span class="icon">😷</span>AQI<span class="layer-desc">Air</span></button>
                 <button class="layer-btn" data-layer="pollen-overlay" onclick="togglePollenOverlay()"><span class="icon">🌿</span>Pollen<span class="layer-desc">Open-Meteo</span></button>
+                <button class="layer-btn" data-layer="radiation" onclick="toggleRadiation()"><span class="icon">☢️</span>Radiation<span class="layer-desc">SafeCast</span></button>
             </div>
             <div id="legend-aqi" class="color-legend"><div class="legend-header">😷 AQI</div><div class="color-bar" style="background:linear-gradient(to right,#009966,#ffde33 25%,#ff9933 50%,#cc0033 75%,#660099 90%,#7e0023)"></div><div class="color-labels"><span>Good</span><span>Moderate</span><span>Bad</span><span>Hazardous</span></div></div>
             <div id="legend-pollen-overlay" class="color-legend"><div class="legend-header">🌿 Pollen</div><div class="legend-row"><div class="legend-dot" style="background:#4caf50"></div>Low</div><div class="legend-row"><div class="legend-dot" style="background:#fbc02d"></div>Moderate</div><div class="legend-row"><div class="legend-dot" style="background:#ff9800"></div>High</div><div class="legend-row"><div class="legend-dot" style="background:#c62828"></div>Very High</div></div>
+            <div id="legend-radiation" class="color-legend">
+            <div class="legend-header">☢️ Radiation (SafeCast)</div>
+            <div class="color-bar" style="background:linear-gradient(to right,#4caf50,#ffeb3b 30%,#ff9800 60%,#c62828)"></div>
+            <div class="color-labels"><span>Normal</span><span>Elevated</span><span>High</span><span>Danger</span></div>
+            <div class="legend-note">Global crowdsourced radiation sensors (µSv/h)</div>
+            </div>
             <div class="info-section">
                 <div class="section-label">📍 Click on map</div>
                 <div id="health-info"><div class="no-data">Click on a point for:<br><span class="hint">🏊 Swimming · 🏃 Running · 🌿 Pollen · 😷 AQI · ☀️ UV · 🦟 Mosquitoes</span></div></div>
@@ -399,6 +435,12 @@
         &copy; 2026 Kopalidis Thomas. All rights reserved.
     </div>
 </div>
+<div class="time-machine-container" id="timeMachine">
+    <span style="font-size: 14px;">⏳</span>
+    <input type="range" id="timeSlider" min="0" max="48" value="48" oninput="updateTimeMachine(this.value)">
+    <span id="timeLabel" style="font-size: 10px; font-family: 'JetBrains Mono'; font-weight: bold; min-width: 45px; text-align: right;">Live</span>
+</div>
+<button class="sos-btn" onclick="sendSOS()" title="Send SOS Emergency">SOS</button>
 <button class="bot-btn" onclick="toggleBot()" title="AI Disaster Assistant">🤖</button>
 <div id="botWindow" class="bot-window">
     <div class="bot-header">
@@ -662,13 +704,14 @@ function toggleFullscreen(){
 document.addEventListener('fullscreenchange',()=>{document.getElementById('fullscreenBtn').textContent=document.fullscreenElement?'✕':'⛶'});
 
 // ═══ MAP & LAYER STYLES ═══
+// 1. Ορίζουμε τα όρια της Γης (για να μην πηγαίνει στο άπειρο)
+// ═══ MAP & LAYER STYLES ═══
 const map=L.map('map').setView([38.24,23.73],6);
 
 let lightTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {maxZoom: 19, attribution: '© OSM © CARTO'});
 let darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom: 19});
 let satTiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom: 19, attribution: '© Esri'});
 let topoTiles = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {maxZoom: 17, attribution: '© OpenTopoMap'});
-
 let currentMapStyle = 0; // 0: Standard, 1: Satellite, 2: Topo/Terrain
 let isDark = false;
 let activeBaseLayer = lightTiles;
@@ -725,16 +768,21 @@ async function fetchWeatherAt(lat,lng){
     const info=document.getElementById('weather-info'),hInfo=document.getElementById('health-info');
     info.classList.add('loading');
     try{
-        const[wR,uvR,marR,dustR]=await Promise.all([
+        // Προστέθηκε το safecast API (radR) για ραδιενέργεια
+        const[wR,uvR,marR,dustR,radR]=await Promise.all([
             fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric&lang=${currentLang==='el'?'el':'en'}`),
             fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=uv_index_max&current=wind_gusts_10m&timezone=auto`),
             fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&current=wave_height,wave_period&hourly=sea_surface_temperature&forecast_hours=1&timezone=auto`).catch(()=>null),
-            fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&current=dust`).catch(()=>null)
+            fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&current=dust`).catch(()=>null),
+            fetch(`https://api.safecast.org/measurements.json?lat=${lat}&lon=${lng}&distance=20000`).catch(()=>null)
         ]);
         const d=await wR.json(),uvD=await uvR.json();
-        let marine=null,dustVal=null;
+        let marine=null,dustVal=null,radiation=null;
+        
         if(marR&&marR.ok){try{const md=await marR.json();if(md.current||md.hourly)marine={wave:md.current?.wave_height,seaTemp:md.hourly?.sea_surface_temperature?.[0]}}catch(e){}}
         if(dustR&&dustR.ok){try{const dd=await dustR.json();if(dd.current&&dd.current.dust!=null)dustVal=dd.current.dust}catch(e){}}
+        if(radR&&radR.ok){try{const rd=await radR.json();if(rd&&rd.length>0)radiation=rd[0].value}catch(e){}}
+        
         const uv=uvD.daily?uvD.daily.uv_index_max[0]:'-';
         const elev=uvD.elevation;
         const gustsKmh=uvD.current?.wind_gusts_10m||(d.wind.gust?Math.round(d.wind.gust*3.6):null);
@@ -753,10 +801,12 @@ async function fetchWeatherAt(lat,lng){
         if(marine&&(marine.seaTemp!=null||marine.wave!=null)){
             const sw=calcSwim(marine.seaTemp,marine.wave,ws,wId);
             swimHtml=`<div class="weather-stat"><span class="label">🏊 ${t('swim')}</span><span class="value"><span class="swim-badge" style="background:${sw.c}">🏊</span></span><span class="unit">${marine.seaTemp!=null?'🌊'+marine.seaTemp.toFixed(1)+'°C':''}${marine.wave!=null?' · '+marine.wave.toFixed(1)+'m':''}</span></div>`;
-            swimPop=`<div class="popup-row"><span class="popup-label">🏊</span><span class="popup-value" style="color:${sw.c}">${sw.t}</span></div>`;
+            swimPop=`<div class="popup-row"><span class="popup-label">🌊 Waves</span><span class="popup-value" style="color:${marine.wave>2?'#c62828':'inherit'}">${marine.wave!=null?marine.wave.toFixed(1)+'m':'-'}</span></div>`;
         }
-        info.classList.remove('loading');
         
+        const radHtml = radiation!=null ? `<div class="weather-stat"><span class="label">☢️ Radiation</span><span class="value" style="color:${radiation>100?'#c62828':'#ff9800'}">${radiation} <span class="unit">cpm</span></span></div>` : '';
+
+        info.classList.remove('loading');
         info.innerHTML=`<div class="weather-location" style="display:flex; justify-content:space-between; align-items:center;">
             <span>📍 ${city} — ${desc}</span>
             <span style="background:var(--bg-layer); padding:2px 6px; border-radius:6px; font-size:10px; color:var(--text-primary); border:1px solid var(--border);">🕐 ${localTimeStr}</span>
@@ -765,24 +815,26 @@ async function fetchWeatherAt(lat,lng){
             <div class="weather-stat"><span class="label">💧 ${t('lHumidity')}</span><span class="value">${hum}<span class="unit">%</span></span></div>
             <div class="weather-stat"><span class="label">⏱️ ${t('lPressure')}</span><span class="value">${press}<span class="unit">hPa</span></span></div>
             <div class="weather-stat"><span class="label">💨 ${bft} Bft</span><span class="value">${wsKmh}<span class="unit">km/h</span></span><span class="unit">${wDirTxt} · ${bftText(bft)}</span></div>
-            <div class="weather-stat"><span class="label">💨 ${t('gusts')}</span><span class="value">${gustsKmh?gustsKmh+'<span class="unit">km/h</span>':'—'}</span></div>
-            <div class="weather-stat"><span class="label"><span class="wind-indicator${bft<2?' calm':''}" style="font-size:16px;--wind-dur:${windDur}s">🌀</span></span><span class="value" style="font-size:10px">${bftText(bft)}</span></div>
-            <div class="weather-stat"><span class="label">🏔️ ${t('elevation')}</span><span class="value">${elev!=null?Math.round(elev)+'<span class="unit">m</span>':'—'}</span></div>
             <div class="weather-stat"><span class="label">☀️ UV</span><span class="value" style="color:${uv>7?'#c62828':uv>5?'#ff9800':'#4caf50'}">${uv}</span></div>
+            ${radHtml || `<div class="weather-stat"><span class="label">🏔️ ${t('elevation')}</span><span class="value">${elev!=null?Math.round(elev)+'<span class="unit">m</span>':'—'}</span></div>`}
             ${swimHtml||`<div class="weather-stat"><span class="label">🦟 ${t('mosquitoes')}</span><span class="value" style="font-size:10px;color:${moz.c}">${moz.t.split(' ')[0]}</span></div>`}
         </div>${gustsKmh&&gustsKmh>=40?`<div class="gust-bar">⚠️ ${t('gusts')}: ${gustsKmh} km/h</div>`:''}${dustVal!=null&&dustVal>=10?`<div class="gust-bar" style="background:rgba(191,128,64,0.15);border-color:rgba(191,128,64,0.3);color:#8d6e63">🌫️ ${t('dustLayer')}: ${dustVal.toFixed(1)} μg/m³</div>`:''}`;
         
         hInfo.innerHTML=`<div class="weather-location" style="color:var(--accent-health)">📍 ${city}</div><div class="loading-inline"><div class="loading-spinner"></div> ${t('loading')}</div>`;
         fetchHealthData(lat,lng,city,moz,uv,{temp:d.main.temp,hum:d.main.humidity,wind:d.wind.speed,wId:d.weather[0].id,rain:(d.rain?d.rain['1h']||0:0)});
         if(clickPopup)map.closePopup(clickPopup);
+        
         const dustPop=dustVal!=null&&dustVal>=10?`<div class="popup-row"><span class="popup-label">🌫️ Dust</span><span class="popup-value" style="color:#8d6e63">${dustVal.toFixed(0)} μg/m³</span></div>`:'';
+        const radPop=radiation!=null?`<div class="popup-row"><span class="popup-label">☢️ Radiation</span><span class="popup-value" style="color:#ff9800">${radiation} cpm</span></div>`:'';
         
         clickPopup=L.popup().setLatLng([lat,lng]).setContent(`<div class="popup-content">
             <div class="popup-title" style="display:flex; justify-content:space-between; align-items:center;">
                 <span>${city}</span>
                 <span style="color:var(--text-secondary); font-size:10px; font-weight:normal;">🕐 ${localTimeStr}</span>
             </div>
-            <div class="popup-row"><span class="popup-label">🌡️</span><span class="popup-value">${temp.toFixed(1)}°C</span></div><div class="popup-row"><span class="popup-label">💨</span><span class="popup-value">${bft} Bft · ${wDirTxt} ${wsKmh}km/h</span></div>${gustsKmh?`<div class="popup-row"><span class="popup-label">💨 Gusts</span><span class="popup-value">${gustsKmh} km/h</span></div>`:''}${swimPop}${dustPop}<div class="popup-row"><span class="popup-label">☀️ UV</span><span class="popup-value">${uv}</span></div><div class="popup-row"><span class="popup-label">🦟</span><span class="popup-value">${moz.t.split(' ')[0]}</span></div></div>`).openOn(map);
+            <div class="popup-row"><span class="popup-label">🌡️</span><span class="popup-value">${temp.toFixed(1)}°C</span></div><div class="popup-row"><span class="popup-label">💨</span><span class="popup-value">${bft} Bft · ${wDirTxt} ${wsKmh}km/h</span></div>${gustsKmh?`<div class="popup-row"><span class="popup-label">💨 Gusts</span><span class="popup-value">${gustsKmh} km/h</span></div>`:''}${swimPop}${dustPop}${radPop}<div class="popup-row"><span class="popup-label">☀️ UV</span><span class="popup-value">${uv}</span></div>
+            <button class="safe-btn" onclick="findSafePoints(${lat}, ${lng})">🏥 Find Safe Points (5km)</button>
+            </div>`).openOn(map);
         
         fetch5Day(lat,lng);checkAlerts(d);
     }catch(e){info.classList.remove('loading');info.innerHTML=`<div class="no-data">${t('connError')}</div>`}
@@ -833,10 +885,11 @@ async function fetchQuakes(){
     const days=currentTimeRangeDays;
     try{
         let url;
-        if(days<=1)url='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson';
-        else if(days<=7)url='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
-        else if(days<=30)url='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';
-        else url=`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${getDateStr(days)}&minmagnitude=4&limit=500`;
+        // Βελτιστοποίηση δεδομένων για να μην κρασάρει (Lag Fix)
+        if(days<=1) url='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson'; 
+        else if(days<=7) url='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson'; // Φέρνει μόνο >2.5 M
+        else if(days<=30) url='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson'; // Φέρνει μόνο >4.5 M
+        else url=`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${getDateStr(days)}&minmagnitude=5&limit=500`;
 
         const r=await fetch(url);
         const d=await r.json();
@@ -906,9 +959,19 @@ function connectQuakeWS() {
                 let c='#4caf50', rad=4;
                 if(mag>=4.5){c='#e53935';rad=12} else if(mag>=2){c='#fbc02d';rad=7}
 
+                // --- TSUNAMI LOGIC ΕΔΩ ---
+                let popupColor = mag >= 5 ? '#c62828' : 'var(--accent)';
+                if(mag >= 7.0) {
+                    showNotification('🌊', 'TSUNAMI WARNING!', 'Evacuate coastal areas near epicenter.', 'danger');
+                    playAlertSound('danger');
+                    // Φτιάχνει τεράστιο κόκκινο δακτύλιο κινδύνου 500χλμ γύρω από τον σεισμό
+                    L.circle([lat, lng], {radius: 500000, color: '#ff9800', fillColor: '#ff9800', fillOpacity: 0.2, className: 'tsunami-zone'}).bindPopup('<b>⚠️ TSUNAMI RISK ZONE</b>').addTo(map);
+                }
+
                 const newMarker = L.circleMarker([lat, lng], { radius: rad, fillColor: c, color: c, weight: 1.5, opacity: 1, fillOpacity: 0.8 })
-                    .bindPopup(`<div class="popup-content"><div class="popup-title" style="color:#c62828">🔴 ${mag.toFixed(1)}M (LIVE)</div><div class="popup-row"><span class="popup-label">Location</span><span class="popup-value" style="font-size:9px">${place}</span></div><div class="popup-row"><span class="popup-label">${t('date')}</span><span class="popup-value">${t('justNow')}</span></div></div>`);
-                
+                    .bindPopup(`<div class="popup-content"><div class="popup-title" style="color:${popupColor}">🔴 ${mag.toFixed(1)}M (LIVE)</div><div class="popup-row"><span class="popup-label">Location</span><span class="popup-value" style="font-size:9px">${place}</span></div><div class="popup-row"><span class="popup-label">${t('date')}</span><span class="popup-value">${t('justNow')}</span></div></div>`);
+                // --------------------------------
+
                 if (quakeLayer) newMarker.addTo(quakeLayer); else { quakeLayer = L.layerGroup([newMarker]).addTo(map); }
                 
                 const statEl = document.getElementById('statQuakes');
@@ -951,37 +1014,97 @@ async function fetchAllFloods(){clearMarkers(floodM);const[a,b]=await Promise.al
 function toggleFloods(){const b=document.querySelector('[data-layer="floods"]'),l=document.getElementById('legend-floods');if(floodsOn){clearMarkers(floodM);b.classList.remove('active');l.classList.remove('visible');floodsOn=false}else{b.classList.add('active');l.classList.add('visible');floodsOn=true;fetchAllFloods()}}
 
 // ═══ LANDSLIDES (GDACS + EONET + ReliefWeb) ═══
-let landslidesOn=false,landM=[];
-async function fetchAllLandslides(){
-    clearMarkers(landM);
-    let total=0;
+let landslidesOn = false, landM = [];
+
+async function fetchAllLandslides() {
+    // 1. Καθαρίζουμε ΠΑΝΤΑ τους παλιούς markers πριν το fetch
+    clearMarkers(landM); 
+    let total = 0;
+    
+    // Προσθήκη loading ειδοποίησης (προαιρετικά)
+    const statsEl = document.getElementById('statLandslides'); // Αν έχεις προσθέσει stat box
+    if(statsEl) statsEl.textContent = '...';
+
     // Source 1: GDACS Landslides
-    try{ total += await fetchGDACS('LS',landM,'#5d4037','🪨'); }catch(e){}
-    // Source 2: EONET Landslides (always try)
-    try{ total += await fetchEONET('landslides',landM,'#8d6e63','🪨'); }catch(e){}
-    // Source 3: ReliefWeb API disasters (landslide/mudslide type)
-    try{
-        const days=currentTimeRangeDays;
-        const fromDate=getDateStr(days);
-        const r=await fetch(`https://api.reliefweb.int/v1/disasters?appname=disastermonitor&filter[operator]=AND&filter[conditions][0][field]=type.name&filter[conditions][0][value]=Land Slide&filter[conditions][1][field]=date.created&filter[conditions][1][value][from]=${fromDate}&fields[include][]=name&fields[include][]=date.created&fields[include][]=country.name&fields[include][]=primary_country.location&limit=100`,{signal:AbortSignal.timeout(10000)});
-        if(r.ok){
-            const d=await r.json();
-            (d.data||[]).forEach(item=>{
-                const f=item.fields;
-                if(!f)return;
-                const loc=f.primary_country?.location;
-                if(!loc||!loc.lat||!loc.lon)return;
-                const title=f.name||t('landslide');
-                const date=f.date?.created?new Date(f.date.created).toLocaleDateString(currentLang==='el'?'el-GR':'en-GB'):'';
-                const country=(f.country||[]).map(c=>c.name).join(', ');
-                const m=L.circleMarker([parseFloat(loc.lat),parseFloat(loc.lon)],{radius:8,fillColor:'#8d6e63',color:'#5d4037',weight:1.5,opacity:0.85,fillOpacity:0.5})
-                    .bindPopup(`<div class="popup-content"><div class="popup-title">🪨 ${title}</div>${country?`<div class="popup-row"><span class="popup-label">${t('country')}</span><span class="popup-value">${country}</span></div>`:''}${date?`<div class="popup-row"><span class="popup-label">${t('date')}</span><span class="popup-value">${date}</span></div>`:''}<div class="popup-row"><span class="popup-label">${t('source')}</span><span class="popup-value">ReliefWeb</span></div></div>`);
-                m.addTo(map);landM.push(m);total++;
+    try { 
+        let n = await fetchGDACS('LS', landM, '#5d4037', '🪨'); 
+        if(typeof n === 'number') total += n;
+    } catch(e) {}
+
+    // Source 2: EONET Landslides
+    try { 
+        let n = await fetchEONET('landslides', landM, '#8d6e63', '🪨'); 
+        if(typeof n === 'number') total += n;
+    } catch(e) {}
+
+    // Source 3: ReliefWeb API
+    try {
+        const days = currentTimeRangeDays;
+        const fromDate = getDateStr(days);
+        // Προσθήκη timeout και σωστό φιλτράρισμα
+        const r = await fetch(`https://api.reliefweb.int/v1/disasters?appname=disastermonitor&filter[operator]=AND&filter[conditions][0][field]=type.name&filter[conditions][0][value]=Land Slide&filter[conditions][1][field]=date.created&filter[conditions][1][value][from]=${fromDate}&fields[include][]=name&fields[include][]=date.created&fields[include][]=country.name&fields[include][]=primary_country.location&limit=100`, { signal: AbortSignal.timeout(10000) });
+        
+        if (r.ok) {
+            const d = await r.json();
+            (d.data || []).forEach(item => {
+                const f = item.fields;
+                if (!f || !f.primary_country || !f.primary_country.location) return;
+                
+                const loc = f.primary_country.location;
+                const title = f.name || t('landslide');
+                const dateRaw = f.date && f.date.created ? f.date.created : null;
+                const dateStr = dateRaw ? new Date(dateRaw).toLocaleDateString(currentLang === 'el' ? 'el-GR' : 'en-GB') : '';
+                const country = (f.country || []).map(c => c.name).join(', ');
+
+                const m = L.circleMarker([parseFloat(loc.lat), parseFloat(loc.lon)], {
+                    radius: 8,
+                    fillColor: '#8d6e63',
+                    color: '#5d4037',
+                    weight: 1.5,
+                    opacity: 0.85,
+                    fillOpacity: 0.5
+                }).bindPopup(`
+                    <div class="popup-content">
+                        <div class="popup-title">🪨 ${title}</div>
+                        ${country ? `<div class="popup-row"><span class="popup-label">${t('country')}</span><span class="popup-value">${country}</span></div>` : ''}
+                        ${dateStr ? `<div class="popup-row"><span class="popup-label">${t('date')}</span><span class="popup-value">${dateStr}</span></div>` : ''}
+                        <div class="popup-row"><span class="popup-label">${t('source')}</span><span class="popup-value">ReliefWeb</span></div>
+                    </div>
+                `);
+                
+                m.addTo(map);
+                landM.push(m);
+                total++;
             });
         }
-    }catch(e){}
-    if(total>0)showNotification('🪨',`${total} ${t('landslides')}`,null,'info');
-    else showNotification('🪨',t('noLandslides'),t('tryLargerRange'),'info');
+    } catch (e) { console.error("ReliefWeb Landslide error:", e); }
+
+    // Ενημέρωση στατιστικών αν υπάρχει box
+    if(statsEl) statsEl.textContent = total;
+
+    // Ειδοποίηση χρήστη
+    if (total > 0) {
+        showNotification('🪨', `${total} ${t('landslides')}`, t('justNow'), 'info');
+    } else if (landslidesOn) {
+        showNotification('🪨', t('noLandslides'), t('tryLargerRange'), 'info');
+    }
+}
+
+function toggleLandslides() {
+    const b = document.querySelector('[data-layer="landslides"]');
+    const l = document.getElementById('legend-landslides');
+    
+    if (landslidesOn) {
+        clearMarkers(landM);
+        if(b) b.classList.remove('active');
+        if(l) l.classList.remove('visible');
+        landslidesOn = false;
+    } else {
+        landslidesOn = true;
+        if(b) b.classList.add('active');
+        if(l) l.classList.add('visible');
+        fetchAllLandslides();
+    }
 }
 function toggleLandslides(){const b=document.querySelector('[data-layer="landslides"]'),l=document.getElementById('legend-landslides');if(landslidesOn){clearMarkers(landM);b.classList.remove('active');l.classList.remove('visible');landslidesOn=false}else{b.classList.add('active');l.classList.add('visible');landslidesOn=true;fetchAllLandslides()}}
 
@@ -1024,152 +1147,251 @@ function toggleTraffic(){
 }
 
 let flightsOn=false,flightM=[];
-async function fetchFlights(){if(!flightsOn)return;flightM.forEach(m=>map.removeLayer(m));flightM=[];try{const bounds=map.getBounds();const r=await fetch(`https://opensky-network.org/api/states/all?lamin=${bounds.getSouth()}&lomin=${bounds.getWest()}&lamax=${bounds.getNorth()}&lomax=${bounds.getEast()}`);const d=await r.json();const st=d.states||[];document.getElementById('statFlights').textContent=st.length;st.slice(0,50).forEach(s=>{if(s[6]&&s[5]){const ic=L.divIcon({className:'',html:`<div class="plane-icon" style="transform:rotate(${s[10]-45}deg)">✈️</div>`});const m=L.marker([s[6],s[5]],{icon:ic}).bindPopup(`✈️ ${s[1]||'N/A'}`);m.addTo(map);flightM.push(m)}})}catch(e){document.getElementById('statFlights').textContent='—'}}
-function toggleFlights(){const b=document.querySelector('[data-layer="flights"]'),l=document.getElementById('legend-flights');if(flightsOn){flightsOn=false;flightM.forEach(m=>map.removeLayer(m));flightM=[];b.classList.remove('active');l.classList.remove('visible');map.off('moveend',fetchFlights)}else{flightsOn=true;b.classList.add('active');l.classList.add('visible');fetchFlights();map.on('moveend',fetchFlights)}}
 
-let issOn=false,issMarker=null,issInt=null;
-function toggleISS(){const b=document.querySelector('[data-layer="iss"]');if(issOn){issOn=false;if(issMarker)map.removeLayer(issMarker);clearInterval(issInt);b.classList.remove('active');document.getElementById('statISS').textContent='Off'}else{issOn=true;b.classList.add('active');const f=async()=>{try{const r=await fetch('https://api.wheretheiss.at/v1/satellites/25544');const d=await r.json();if(!issMarker){issMarker=L.marker([d.latitude,d.longitude],{icon:L.divIcon({html:'<div class="iss-icon">🛰️</div>'})}).addTo(map);map.flyTo([d.latitude,d.longitude],4)}else issMarker.setLatLng([d.latitude,d.longitude]);document.getElementById('statISS').textContent=Math.round(d.velocity)+'km/h'}catch(e){}};f();issInt=setInterval(f,3000)}}
+async function fetchFlights(){
+    if(!flightsOn)return;
+    flightM.forEach(m=>map.removeLayer(m));
+    flightM=[];
+    try{
+        const bounds=map.getBounds();
+        const r=await fetch(`https://opensky-network.org/api/states/all?lamin=${bounds.getSouth()}&lomin=${bounds.getWest()}&lamax=${bounds.getNorth()}&lomax=${bounds.getEast()}`);
+        const d=await r.json();
+        const st=d.states||[];
+        document.getElementById('statFlights').textContent=st.length;
+        
+        st.slice(0,50).forEach(s=>{
+            if(s[6]&&s[5]){
+                // Έλεγχος για κωδικό έκτακτης ανάγκης (Squawk 7700)
+                const isEmergency = (s[14] === '7700'); 
+                const htmlIcon = isEmergency ? `<div class="plane-icon" style="transform:rotate(${s[10]-45}deg); font-size:24px; text-shadow:0 0 10px red;">🆘</div>` : `<div class="plane-icon" style="transform:rotate(${s[10]-45}deg)">✈️</div>`;
+                const ic = L.divIcon({className:'', html: htmlIcon});
+                
+                const popupHtml = isEmergency ? `<b style="color:red">⚠️ EMERGENCY 7700</b><br>Flight: ${s[1]||'N/A'}<br>Speed: ${s[9]?Math.round(s[9]*3.6):0} km/h` : `✈️ ${s[1]||'N/A'}`;
+                
+                const m=L.marker([s[6],s[5]],{icon:ic}).bindPopup(popupHtml);
+                m.addTo(map);
+                flightM.push(m);
+                
+                // Πέταγμα Notification αν βρεθεί αεροπλάνο σε κίνδυνο
+                if(isEmergency) showNotification('🛩️', `Flight ${s[1]||'Unknown'} EMERGENCY`, 'Squawk 7700 detected!', 'danger');
+            }
+        });
+    }catch(e){
+        document.getElementById('statFlights').textContent='—';
+    }
+}
+
+function toggleFlights(){
+    const b=document.querySelector('[data-layer="flights"]'),l=document.getElementById('legend-flights');
+    if(flightsOn){
+        flightsOn=false;
+        flightM.forEach(m=>map.removeLayer(m));
+        flightM=[];
+        b.classList.remove('active');
+        l.classList.remove('visible');
+        map.off('moveend',fetchFlights);
+    }else{
+        flightsOn=true;
+        b.classList.add('active');
+        l.classList.add('visible');
+        fetchFlights();
+        map.on('moveend',fetchFlights);
+    }
+}
 
 // ═══ SHIPS (Multi-source: REST APIs + AIS WebSocket + OpenSeaMap) ═══
-let shipsOn=false,shipMarkers={},aisWebSocket=null,aisReconnectTimer=null,shipFetchTimer=null,shipSeaLayer=null;
+let shipsOn = false, shipMarkers = {}, aisWebSocket = null, aisReconnectTimer = null, shipFetchTimer = null, shipSeaLayer = null;
 
-function getShipEmoji(t){
-    if(t>=70&&t<=79)return '🚛';if(t>=80&&t<=89)return '⛽';
-    if(t>=60&&t<=69)return '🛳️';return '🚢';
+function getShipEmoji(t) {
+    if (t >= 70 && t <= 79) return '🚛'; if (t >= 80 && t <= 89) return '⛽';
+    if (t >= 60 && t <= 69) return '🛳️'; return '🚢';
 }
-function getShipColor(t){
-    if(t>=70&&t<=79)return '#1565c0';if(t>=80&&t<=89)return '#2e7d32';
-    if(t>=60&&t<=69)return '#f57c00';return '#546e7a';
-}
-function clearShips(){
-    Object.values(shipMarkers).forEach(m=>map.removeLayer(m));
-    shipMarkers={};document.getElementById('statShips').textContent='—';
-}
-function addShipMarker(mmsi,lat,lng,name,cog,sog,shipType){
-    if(!shipsOn||!lat||!lng||lat>90||lat<-90)return;
-    if(!map.getBounds().contains([lat,lng]))return;
-    if(shipMarkers[mmsi]){shipMarkers[mmsi].setLatLng([lat,lng]);return}
-    const ic=L.divIcon({className:'',html:`<div class="ship-icon" style="transform:rotate(${cog||0}deg);color:${getShipColor(shipType)};font-size:16px;filter:drop-shadow(0 2px 2px rgba(0,0,0,0.5))">${getShipEmoji(shipType)}</div>`,iconSize:[20,20],iconAnchor:[10,10]});
-    const m=L.marker([lat,lng],{icon:ic}).bindPopup(`<div class="popup-content"><div class="popup-title">🚢 ${name||t('ship')}</div><div class="popup-row"><span class="popup-label">${t('speed')}</span><span class="popup-value">${sog!=null?sog.toFixed(1)+' kn':'—'}</span></div><div class="popup-row"><span class="popup-label">Course</span><span class="popup-value">${cog!=null?cog.toFixed(0)+'°':'—'}</span></div><div class="popup-row"><span class="popup-label">MMSI</span><span class="popup-value">${mmsi}</span></div></div>`);
-    m.addTo(map);shipMarkers[mmsi]=m;
-    document.getElementById('statShips').textContent=Object.keys(shipMarkers).length;
+function getShipColor(t) {
+    if (t >= 70 && t <= 79) return '#1565c0'; if (t >= 80 && t <= 89) return '#2e7d32';
+    if (t >= 60 && t <= 69) return '#f57c00'; return '#546e7a';
 }
 
-// ── Source 1: Digitraffic Finland REST API (Baltic/Finland, very reliable) ──
-async function fetchShipsREST(){
-    if(!shipsOn)return;
-    const z=map.getZoom();
-    if(z<7){document.getElementById('statShips').textContent='Zoom+';return}
-    document.getElementById('statShips').textContent='...';
-    try{
-        const r=await fetch('https://meri.digitraffic.fi/api/ais/v1/locations',{signal:AbortSignal.timeout(12000)});
-        const d=await r.json();
-        let count=0;
-        const bounds=map.getBounds();
-        (d.features||[]).forEach(f=>{
-            const [lng,lat]=f.geometry.coordinates;
-            if(!bounds.contains([lat,lng]))return;
-            const p=f.properties;
-            addShipMarker(String(p.mmsi),lat,lng,null,p.cog,p.sog,0);
+function clearShips() {
+    Object.values(shipMarkers).forEach(m => map.removeLayer(m));
+    shipMarkers = {};
+    const statBox = document.getElementById('statShips');
+    if (statBox) statBox.textContent = '—';
+}
+
+function addShipMarker(mmsi, lat, lng, name, cog, sog, shipType) {
+    if (!shipsOn || !lat || !lng || lat > 90 || lat < -90) return;
+    if (!map.getBounds().contains([lat, lng])) return;
+    if (shipMarkers[mmsi]) { shipMarkers[mmsi].setLatLng([lat, lng]); return; }
+    
+    const ic = L.divIcon({ className: '', html: `<div class="ship-icon" style="transform:rotate(${cog || 0}deg);color:${getShipColor(shipType)};font-size:16px;filter:drop-shadow(0 2px 2px rgba(0,0,0,0.5))">${getShipEmoji(shipType)}</div>`, iconSize: [20, 20], iconAnchor: [10, 10] });
+    const m = L.marker([lat, lng], { icon: ic }).bindPopup(`<div class="popup-content"><div class="popup-title">🚢 ${name || t('ship')}</div><div class="popup-row"><span class="popup-label">${t('speed')}</span><span class="popup-value">${sog != null ? sog.toFixed(1) + ' kn' : '—'}</span></div><div class="popup-row"><span class="popup-label">Course</span><span class="popup-value">${cog != null ? cog.toFixed(0) + '°' : '—'}</span></div><div class="popup-row"><span class="popup-label">MMSI</span><span class="popup-value">${mmsi}</span></div></div>`);
+    m.addTo(map);
+    shipMarkers[mmsi] = m;
+    
+    const statBox = document.getElementById('statShips');
+    if (statBox) statBox.textContent = Object.keys(shipMarkers).length;
+}
+
+async function fetchShipsREST() {
+    if (!shipsOn) return;
+    const z = map.getZoom();
+    const statBox = document.getElementById('statShips');
+    if (z < 6) { if (statBox) statBox.textContent = 'Zoom+'; return; } // Κατέβασα το όριο στο 6
+    if (statBox) statBox.textContent = '...';
+    try {
+        const r = await fetch('https://meri.digitraffic.fi/api/ais/v1/locations', { signal: AbortSignal.timeout(12000) });
+        const d = await r.json();
+        let count = 0;
+        const bounds = map.getBounds();
+        (d.features || []).forEach(f => {
+            const [lng, lat] = f.geometry.coordinates;
+            if (!bounds.contains([lat, lng])) return;
+            const p = f.properties;
+            addShipMarker(String(p.mmsi), lat, lng, null, p.cog, p.sog, 0);
             count++;
         });
-        if(count>0)document.getElementById('statShips').textContent=Object.keys(shipMarkers).length;
-    }catch(e){}
+        if (count > 0 && statBox) statBox.textContent = Object.keys(shipMarkers).length;
+    } catch (e) { }
 }
 
-// ── Source 2: Overpass API — ports, harbors, ferries from OpenStreetMap ──
-async function fetchPortsOSM(){
-    if(!shipsOn)return;
-    const z=map.getZoom();
-    if(z<10)return;
-    const b=map.getBounds(),s=b.getSouth(),w=b.getWest(),n=b.getNorth(),e=b.getEast();
-    try{
-        const query=`[out:json][timeout:10];(node["amenity"="ferry_terminal"](${s},${w},${n},${e});node["harbour"="yes"](${s},${w},${n},${e});node["seamark:type"](${s},${w},${n},${e}););out body 150;`;
-        const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(query),signal:AbortSignal.timeout(10000)});
-        const d=await r.json();
-        (d.elements||[]).forEach(el=>{
-            if(!el.lat||!el.lon)return;
-            const name=el.tags?.name||el.tags?.['seamark:name']||'';
-            const type=el.tags?.['seamark:type']||el.tags?.amenity||'port';
-            if(shipMarkers['osm_'+el.id])return;
-            const emoji=type==='ferry_terminal'?'⛴️':type==='harbour'?'⚓':'🔶';
-            const ic=L.divIcon({className:'',html:`<div style="font-size:14px;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4))">${emoji}</div>`,iconSize:[16,16],iconAnchor:[8,8]});
-            const m=L.marker([el.lat,el.lon],{icon:ic}).bindPopup(`<div class="popup-content"><div class="popup-title">${emoji} ${name||type}</div></div>`);
-            m.addTo(map);shipMarkers['osm_'+el.id]=m;
+async function fetchPortsOSM() {
+    if (!shipsOn) return;
+    const z = map.getZoom();
+    if (z < 10) return;
+    const b = map.getBounds(), s = b.getSouth(), w = b.getWest(), n = b.getNorth(), e = b.getEast();
+    try {
+        const query = `[out:json][timeout:10];(node["amenity"="ferry_terminal"](${s},${w},${n},${e});node["harbour"="yes"](${s},${w},${n},${e});node["seamark:type"](${s},${w},${n},${e}););out body 150;`;
+        const r = await fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: 'data=' + encodeURIComponent(query), signal: AbortSignal.timeout(10000) });
+        const d = await r.json();
+        (d.elements || []).forEach(el => {
+            if (!el.lat || !el.lon) return;
+            const name = el.tags?.name || el.tags?.['seamark:name'] || '';
+            const type = el.tags?.['seamark:type'] || el.tags?.amenity || 'port';
+            if (shipMarkers['osm_' + el.id]) return;
+            const emoji = type === 'ferry_terminal' ? '⛴️' : type === 'harbour' ? '⚓' : '🔶';
+            const ic = L.divIcon({ className: '', html: `<div style="font-size:14px;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4))">${emoji}</div>`, iconSize: [16, 16], iconAnchor: [8, 8] });
+            const m = L.marker([el.lat, el.lon], { icon: ic }).bindPopup(`<div class="popup-content"><div class="popup-title">${emoji} ${name || type}</div></div>`);
+            m.addTo(map); shipMarkers['osm_' + el.id] = m;
         });
-    }catch(e){}
+    } catch (e) { }
 }
 
-// ── Source 3: AISStream WebSocket (global live) ──
-function connectAIS(){
-    if(!shipsOn)return;
-    if(aisWebSocket){aisWebSocket.onclose=()=>{};aisWebSocket.close();aisWebSocket=null}
-    if(map.getZoom()<8)return;
-    const bounds=map.getBounds();
-    const sw=[bounds.getSouthWest().lat,bounds.getSouthWest().lng];
-    const ne=[bounds.getNorthEast().lat,bounds.getNorthEast().lng];
-    try{
-        aisWebSocket=new WebSocket('wss://stream.aisstream.io/v0/stream');
-        let gotData=false;
-        aisWebSocket.onopen=()=>{
-            aisWebSocket.send(JSON.stringify({APIKey:AIS_KEY,BoundingBoxes:[[sw,ne]],FilterMessageTypes:["PositionReport"]}));
-            // Timeout: αν δεν πάρουμε data σε 8 δευτ, δοκιμάζουμε REST fallback
-            setTimeout(()=>{if(!gotData&&shipsOn){fetchShipsREST();fetchPortsOSM()}},8000);
+function connectAIS() {
+    if (!shipsOn) return;
+    if (aisWebSocket) { aisWebSocket.onclose = () => { }; aisWebSocket.close(); aisWebSocket = null }
+    if (map.getZoom() < 6) return;
+    const bounds = map.getBounds();
+    const sw = [bounds.getSouthWest().lat, bounds.getSouthWest().lng];
+    const ne = [bounds.getNorthEast().lat, bounds.getNorthEast().lng];
+    try {
+        aisWebSocket = new WebSocket('wss://stream.aisstream.io/v0/stream');
+        let gotData = false;
+        aisWebSocket.onopen = () => {
+            aisWebSocket.send(JSON.stringify({ APIKey: AIS_KEY, BoundingBoxes: [[sw, ne]], FilterMessageTypes: ["PositionReport"] }));
+            setTimeout(() => { if (!gotData && shipsOn) { fetchShipsREST(); fetchPortsOSM(); } }, 8000);
         };
-        aisWebSocket.onmessage=(event)=>{
-            if(!shipsOn)return;
-            gotData=true;
-            try{
-                const msg=JSON.parse(event.data);
-                if(msg.MessageType==="PositionReport"){
-                    const pos=msg.Message.PositionReport,meta=msg.MetaData||{};
-                    addShipMarker(String(meta.MMSI),pos.Latitude,pos.Longitude,(meta.ShipName||'').trim(),pos.Cog,pos.Sog,meta.ShipType||0);
+        aisWebSocket.onmessage = (event) => {
+            if (!shipsOn) return;
+            gotData = true;
+            try {
+                const msg = JSON.parse(event.data);
+                if (msg.MessageType === "PositionReport") {
+                    const pos = msg.Message.PositionReport, meta = msg.MetaData || {};
+                    addShipMarker(String(meta.MMSI), pos.Latitude, pos.Longitude, (meta.ShipName || '').trim(), pos.Cog, pos.Sog, meta.ShipType || 0);
                 }
-            }catch(e){}
+            } catch (e) { }
         };
-        aisWebSocket.onerror=()=>{
-            // WebSocket failed → REST fallback
-            fetchShipsREST();fetchPortsOSM();
-        };
-        aisWebSocket.onclose=(ev)=>{
-            if(shipsOn&&ev.code!==1000){
+        aisWebSocket.onerror = () => { fetchShipsREST(); fetchPortsOSM(); };
+        aisWebSocket.onclose = (ev) => {
+            if (shipsOn && ev.code !== 1000) {
                 clearTimeout(aisReconnectTimer);
-                // Fallback αμέσως, retry WebSocket μετά 30s
-                fetchShipsREST();fetchPortsOSM();
-                aisReconnectTimer=setTimeout(connectAIS,30000);
+                fetchShipsREST(); fetchPortsOSM();
+                aisReconnectTimer = setTimeout(connectAIS, 30000);
             }
         };
-    }catch(e){fetchShipsREST();fetchPortsOSM()}
+    } catch (e) { fetchShipsREST(); fetchPortsOSM() }
 }
 
 let shipMoveTimeout;
-function onMapMoveForShips(){
-    if(!shipsOn)return;
+function onMapMoveForShips() {
+    if (!shipsOn) return;
     clearTimeout(shipMoveTimeout);
-    shipMoveTimeout=setTimeout(()=>{clearShips();connectAIS();fetchShipsREST();fetchPortsOSM()},2000);
+    shipMoveTimeout = setTimeout(() => { clearShips(); connectAIS(); fetchShipsREST(); fetchPortsOSM() }, 2000);
 }
 
-function toggleShips(){
-    const b=document.querySelector('[data-layer="ships"]'),l=document.getElementById('legend-ships');
-    if(shipsOn){
-        shipsOn=false;clearTimeout(aisReconnectTimer);clearTimeout(shipMoveTimeout);clearTimeout(shipFetchTimer);
-        if(aisWebSocket){aisWebSocket.onclose=()=>{};aisWebSocket.close();aisWebSocket=null}
+function toggleShips() {
+    const b = document.querySelector('[data-layer="ships"]'), l = document.getElementById('legend-ships');
+    if (shipsOn) {
+        shipsOn = false; clearTimeout(aisReconnectTimer); clearTimeout(shipMoveTimeout); clearTimeout(shipFetchTimer);
+        if (aisWebSocket) { aisWebSocket.onclose = () => { }; aisWebSocket.close(); aisWebSocket = null }
         clearShips();
-        if(shipSeaLayer){map.removeLayer(shipSeaLayer);shipSeaLayer=null}
-        b.classList.remove('active');l.classList.remove('visible');
-        map.off('moveend',onMapMoveForShips);
-    }else{
-        shipsOn=true;b.classList.add('active');l.classList.add('visible');
-        // OpenSeaMap tiles (ναυτικά σημάδια, λιμάνια)
-        shipSeaLayer=L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png',{opacity:0.7,maxZoom:18});
+        if (shipSeaLayer) { map.removeLayer(shipSeaLayer); shipSeaLayer = null }
+        if(b) b.classList.remove('active'); 
+        if (l) l.classList.remove('visible');
+        map.off('moveend', onMapMoveForShips);
+    } else {
+        shipsOn = true; 
+        if(b) b.classList.add('active'); 
+        if (l) l.classList.add('visible');
+        shipSeaLayer = L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', { opacity: 0.7, maxZoom: 18 });
         shipSeaLayer.addTo(map);
         connectAIS();
         fetchShipsREST();
         fetchPortsOSM();
-        // Auto-refresh REST κάθε 60 δευτ
-        shipFetchTimer=setInterval(()=>{if(shipsOn)fetchShipsREST()},60000);
-        map.on('moveend',onMapMoveForShips);
-        showNotification('🚢',t('liveShips'),'AIS + Digitraffic + OpenSeaMap','info');
+        shipFetchTimer = setInterval(() => { if (shipsOn) fetchShipsREST() }, 60000);
+        map.on('moveend', onMapMoveForShips);
+        showNotification('🚢', t('liveShips'), 'AIS + Digitraffic + OpenSeaMap', 'info');
+    }
+}
+// ═══ ISS (Διεθνής Διαστημικός Σταθμός) ═══
+let issOn = false, issMarker = null, issInt = null;
+
+function toggleISS() {
+    const b = document.querySelector('[data-layer="iss"]');
+    const statBox = document.getElementById('statISS');
+    
+    if (issOn) {
+        issOn = false;
+        if (issMarker) map.removeLayer(issMarker);
+        clearInterval(issInt);
+        if (b) b.classList.remove('active');
+        if (statBox) statBox.textContent = '—';
+    } else {
+        issOn = true;
+        if (b) b.classList.add('active');
+        
+        const f = async () => {
+            try {
+                const r = await fetch('https://api.wheretheiss.at/v1/satellites/25544');
+                const d = await r.json();
+                
+                const lat = parseFloat(d.latitude);
+                const lon = parseFloat(d.longitude);
+                
+                if (!issMarker) {
+                    issMarker = L.marker([lat, lon], {
+                        icon: L.divIcon({ 
+                            html: '<div class="iss-icon" style="font-size:30px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.5))">🛰️</div>', 
+                            className: '' 
+                        })
+                    }).addTo(map);
+                    
+                    map.flyTo([lat, lon], 4, { duration: 1.5 });
+                } else {
+                    issMarker.setLatLng([lat, lon]);
+                }
+                
+                issMarker.bindPopup(`<b>🛰️ ISS (Live)</b><br>Speed: ${Math.round(d.velocity)} km/h<br>Altitude: ${Math.round(d.altitude)} km`);
+                
+                if (statBox) statBox.textContent = Math.round(d.velocity) + ' km/h';
+            } catch (e) {
+                console.error("ISS Error");
+            }
+        };
+        
+        f(); 
+        issInt = setInterval(f, 3000); 
+        showNotification('🛰️', 'Tracking ISS', 'Position updates every 3s', 'info');
     }
 }
 // ═══ TRAINS (OpenRailwayMap + Digitraffic Finland) ═══
@@ -1458,101 +1680,54 @@ async function fetchHealthData(lat,lng,city,moz,uv,wx){
     h+='</div>';hI.innerHTML=h;
 }
 
-// ═══ THUNDER / LIGHTNING ═══
-let thunderOn=false,thunderInt=null,thunderRefresh=null,lightningMarkers=[],stormAreas=[],stormCircles=[];
-function playThunderSound(){
-    if(!soundEnabled)return;
-    try{
-        const ctx=getAudioCtx(),now=ctx.currentTime;
-        const len=ctx.sampleRate*3,buf=ctx.createBuffer(1,len,ctx.sampleRate),ch=buf.getChannelData(0);
-        for(let i=0;i<len;i++)ch[i]=(Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*0.7));
-        const src=ctx.createBufferSource();src.buffer=buf;
-        const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.setValueAtTime(120,now);lp.frequency.exponentialRampToValueAtTime(35,now+2.5);
-        const gain=ctx.createGain();gain.gain.setValueAtTime(0.01,now);gain.gain.linearRampToValueAtTime(0.35,now+0.08);gain.gain.exponentialRampToValueAtTime(0.01,now+3);
-        src.connect(lp);lp.connect(gain);gain.connect(ctx.destination);src.start(now);src.stop(now+3);
-        const osc=ctx.createOscillator(),g2=ctx.createGain();
-        osc.type='sawtooth';osc.frequency.setValueAtTime(2000,now);osc.frequency.exponentialRampToValueAtTime(80,now+0.15);
-        g2.gain.setValueAtTime(0.25,now);g2.gain.exponentialRampToValueAtTime(0.001,now+0.2);
-        osc.connect(g2);g2.connect(ctx.destination);osc.start(now);osc.stop(now+0.2);
-    }catch(e){}
-}
-function createLightningFlash(){
-    const f=document.getElementById('lightningFlash');
-    f.classList.remove('flash');void f.offsetWidth;f.classList.add('flash');
-    setTimeout(()=>f.classList.remove('flash'),600);
-}
-async function fetchStormAreas(){
-    try{
-        const c=map.getCenter();
-        const r=await fetch(`https://api.openweathermap.org/data/2.5/find?lat=${c.lat}&lon=${c.lng}&cnt=50&appid=${API_KEY}&units=metric`);
-        const d=await r.json();
-        const storms=(d.list||[]).filter(c=>c.weather&&c.weather[0]&&c.weather[0].id>=200&&c.weather[0].id<=232);
-        stormAreas=storms.map(s=>({lat:s.coord.lat,lng:s.coord.lon,name:s.name,desc:s.weather[0].description,id:s.weather[0].id}));
-        stormCircles.forEach(c=>map.removeLayer(c));stormCircles=[];
-        stormAreas.forEach(s=>{
-            const c=L.circle([s.lat,s.lng],{radius:30000,fillColor:'#7c4dff',color:'#311b92',weight:1.5,opacity:0.6,fillOpacity:0.12,dashArray:'6,4'}).bindPopup(`<div class="popup-content"><div class="popup-title">⛈️ ${s.name}</div><div class="popup-row"><span class="popup-label">${t('condition')}</span><span class="popup-value">${s.desc}</span></div></div>`);
-            c.addTo(map);stormCircles.push(c);
+// ═══ THUNDER / STORM RADAR (RainViewer API) ═══
+let radarLayer = null, radarOn = false, radarTimer = null;
+
+async function fetchLiveRadar() {
+    try {
+        const res = await fetch('https://api.rainviewer.com/public/weather-maps.json');
+        const data = await res.json();
+        // Παίρνουμε το πιο πρόσφατο (τελευταίο) frame του ραντάρ
+        const latestPath = data.radar.past[data.radar.past.length - 1].path;
+        
+        if(radarLayer) map.removeLayer(radarLayer);
+        
+        // Color scheme 2 = "Καταιγίδες/Κεραυνοί", smooth=1 (ομαλό)
+        radarLayer = L.tileLayer(`https://tilecache.rainviewer.com${latestPath}/256/{z}/{x}/{y}/2/1_1.png`, {
+            opacity: 0.65, zIndex: 1000
         });
-        return stormAreas;
-    }catch(e){return []}
-}
-function strikeAtStorm(){
-    if(!thunderOn||stormAreas.length===0)return;
-    const storm=stormAreas[Math.floor(Math.random()*stormAreas.length)];
-    const lat=storm.lat+(Math.random()-0.5)*0.5;
-    const lng=storm.lng+(Math.random()-0.5)*0.5;
-    const ic=L.divIcon({className:'lightning-bolt',html:'⚡',iconSize:[30,30],iconAnchor:[15,15]});
-    const m=L.marker([lat,lng],{icon:ic}).addTo(map);
-    lightningMarkers.push(m);
-    setTimeout(()=>{map.removeLayer(m);lightningMarkers=lightningMarkers.filter(x=>x!==m)},1400);
-    if(map.getBounds().contains([lat,lng])){
-        createLightningFlash();
-        setTimeout(()=>playThunderSound(),300+Math.random()*2000);
+        radarLayer.addTo(map);
+    } catch(e) {
+        console.error("Radar Error", e);
     }
 }
-function scheduleNextStrike(){
-    if(!thunderOn)return;
-    const delay=stormAreas.length>3?2000+Math.random()*3000:4000+Math.random()*7000;
-    thunderInt=setTimeout(()=>{strikeAtStorm();scheduleNextStrike()},delay);
-}
-let thunderMoveTimer=null;
-function onThunderMove(){
-    if(!thunderOn)return;
-    clearTimeout(thunderMoveTimer);
-    thunderMoveTimer=setTimeout(async()=>{
-        const storms=await fetchStormAreas();
-        updateThunderLegend(storms);
-        if(storms.length>0&&!thunderInt){scheduleNextStrike()}
-    },1500);
-}
-function updateThunderLegend(storms){
-    const note=document.querySelector('#legend-thunder .legend-note');
-    if(!note)return;
-    if(storms.length===0)note.textContent=t('noStorms');
-    else note.textContent=`⛈️ ${storms.length} ${t('stormsLabel')}: ${storms.map(s=>s.name).slice(0,5).join(', ')}`;
-}
-async function toggleThunder(){
-    const b=document.querySelector('[data-layer="thunder"]'),l=document.getElementById('legend-thunder');
-    if(thunderOn){
-        thunderOn=false;clearTimeout(thunderInt);thunderInt=null;clearInterval(thunderRefresh);
-        lightningMarkers.forEach(m=>map.removeLayer(m));lightningMarkers=[];
-        stormCircles.forEach(c=>map.removeLayer(c));stormCircles=[];stormAreas=[];
-        b.classList.remove('active');l.classList.remove('visible');
-        map.off('moveend',onThunderMove);
-    }else{
-        thunderOn=true;b.classList.add('active');l.classList.add('visible');
-        showNotification('⚡',t('scanStorms'),'OpenWeatherMap scan','info');
-        const storms=await fetchStormAreas();
-        if(storms.length===0){
-            showNotification('⚡',t('noStormsFound'),t('moveStormy'),'info');
-        }else{
-            showNotification('⚡',`${storms.length} ${t('stormsFound')}`,storms.map(s=>s.name).slice(0,4).join(', '),'warning');
-            setTimeout(strikeAtStorm,600);
-            scheduleNextStrike();
-        }
-        updateThunderLegend(storms);
-        thunderRefresh=setInterval(async()=>{if(thunderOn){const s=await fetchStormAreas();updateThunderLegend(s)}},300000);
-        map.on('moveend',onThunderMove);
+
+function toggleThunder() {
+    const btn = document.querySelector('[data-layer="thunder"]'), l = document.getElementById('legend-thunder');
+    if(radarOn) {
+        radarOn = false;
+        if(radarLayer) map.removeLayer(radarLayer);
+        clearInterval(radarTimer);
+        btn.classList.remove('active');
+        l.classList.remove('visible');
+        // Αλλάζουμε πίσω το note του legend
+        const note = l.querySelector('.legend-note');
+        if(note) note.textContent = "Live Storm & Rain Radar";
+    } else {
+        radarOn = true;
+        btn.classList.add('active');
+        l.classList.add('visible');
+        
+        const note = l.querySelector('.legend-note');
+        if(note) note.textContent = "⛈️ Fetching live storm cells...";
+        
+        fetchLiveRadar().then(() => {
+            if(note) note.textContent = "⛈️ Live Storm Radar Active (RainViewer)";
+            showNotification('⛈️', 'Storm Radar Active', 'Showing real-time storm cells', 'warning');
+        });
+        
+        // Ανανέωση του ραντάρ κάθε 10 λεπτά (νέα frames)
+        radarTimer = setInterval(fetchLiveRadar, 600000);
     }
 }
 
@@ -1695,7 +1870,212 @@ async function refreshStats(){
     }catch(e){}
 }
 refreshStats();
+// ═══ 1. GLOBAL EMERGENCY NEWS (ReliefWeb API) ═══
+async function fetchEmergencyNews() {
+    const container = document.getElementById('news-container');
+    try {
+        const r = await fetch('https://api.reliefweb.int/v1/reports?appname=disastermonitor&preset=latest&limit=5');
+        const d = await r.json();
+        container.innerHTML = '';
+        if(d.data && d.data.length > 0) {
+            d.data.forEach(item => {
+                const title = item.fields.title;
+                const url = item.fields.url;
+                container.innerHTML += `<div class="news-item"><a href="${url}" target="_blank">📰 ${title}</a></div>`;
+            });
+        } else {
+            container.innerHTML = '<div style="font-size:10px; color:var(--text-secondary);">No breaking news right now.</div>';
+        }
+    } catch(e) {
+        container.innerHTML = '<div style="font-size:10px; color:var(--text-secondary);">News feed unavailable.</div>';
+    }
+}
+fetchEmergencyNews();
+setInterval(fetchEmergencyNews, 300000); // Ανανέωση κάθε 5 λεπτά
 
+// ═══ 3. SAFE POINTS LOCATOR (Overpass API) ═══
+let safePointsLayer = L.layerGroup().addTo(map);
+async function findSafePoints(lat, lng) {
+    safePointsLayer.clearLayers();
+    showNotification('🏥', 'Searching...', 'Looking for Hospitals, Police, Fire within 5km', 'info');
+    
+    const query = `[out:json][timeout:15];(
+        node["amenity"="hospital"](around:5000, ${lat}, ${lng});
+        node["amenity"="fire_station"](around:5000, ${lat}, ${lng});
+        node["amenity"="police"](around:5000, ${lat}, ${lng});
+    );out body;`;
+
+    try {
+        const res = await fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: 'data=' + encodeURIComponent(query) });
+        const data = await res.json();
+        
+        let count = 0;
+        data.elements.forEach(el => {
+            if(!el.lat || !el.lon) return;
+            const type = el.tags.amenity;
+            const iconStr = type === 'hospital' ? '🏥' : type === 'fire_station' ? '🚒' : '🚔';
+            const color = type === 'hospital' ? '#c62828' : type === 'fire_station' ? '#ff9800' : '#1565c0';
+            
+            const ic = L.divIcon({ html: `<div style="font-size:22px; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">${iconStr}</div>`, className: '', iconSize: [22, 22], iconAnchor: [11, 11] });
+            const name = el.tags.name || type.replace('_', ' ').toUpperCase();
+            
+            const m = L.marker([el.lat, el.lon], { icon: ic }).bindPopup(`<div class="popup-content"><div class="popup-title" style="color:${color}">${iconStr} ${name}</div><div class="popup-row"><span class="popup-label">Type</span><span class="popup-value">${type}</span></div></div>`);
+            safePointsLayer.addLayer(m);
+            count++;
+        });
+        
+        if(count > 0) {
+            showNotification('🏥', `Found ${count} Safe Points`, 'Zoom in to see them', 'success');
+            map.flyTo([lat, lng], 13);
+            if(clickPopup) map.closePopup(clickPopup);
+        } else {
+            showNotification('⚠️', 'No Safe Points Found', 'within 5km radius', 'warning');
+        }
+    } catch(e) { showNotification('❌', 'Error', 'Failed to fetch safe points', 'danger'); }
+}
+
+// ═══ 4. TIME MACHINE SLIDER LOGIC ═══
+function updateTimeMachine(value) {
+    const label = document.getElementById('timeLabel');
+    const hoursAgo = 48 - value;
+    
+    if(hoursAgo === 0) {
+        label.textContent = "Live";
+        label.style.color = "var(--text-primary)";
+        document.getElementById('map').style.filter = "none";
+    } else {
+        label.textContent = `-${hoursAgo}h`;
+        label.style.color = "#ff9800";
+        const saturate = 100 - (hoursAgo * 1.5);
+        const sepia = hoursAgo * 1.2;
+        document.getElementById('map').style.filter = `sepia(${sepia}%) saturate(${saturate}%) brightness(85%)`;
+    }
+}
+// ═══ 5. RADIATION LAYER (SafeCast) ═══
+let radiationOn = false, radiationLayer = null;
+
+function toggleRadiation() {
+    const btn = document.querySelector('[data-layer="radiation"]'), l = document.getElementById('legend-radiation');
+    if (radiationOn) {
+        radiationOn = false;
+        if(radiationLayer) map.removeLayer(radiationLayer);
+        btn.classList.remove('active'); 
+        l.classList.remove('visible');
+    } else {
+        radiationOn = true;
+        btn.classList.add('active'); 
+        l.classList.add('visible');
+        
+        // Χρήση του επίσημου Safecast Tile Layer
+        radiationLayer = L.tileLayer('https://s3.amazonaws.com/te512.safecast.org/{z}/{x}/{y}.png', {
+            maxZoom: 16, 
+            opacity: 0.65, 
+            attribution: '© Safecast'
+        });
+        radiationLayer.addTo(map);
+        showNotification('☢️', 'Radiation Sensors', 'Global Safecast Data', 'warning');
+    }
+}
+// ═══ 6. NASA ASTEROIDS & SPACE WEATHER ═══
+async function fetchNASA() {
+    const today = new Date().toISOString().split('T')[0];
+    const asteroidBox = document.getElementById('asteroid-info');
+    const solarBox = document.getElementById('solar-info');
+    
+    // 1. Asteroids
+    try {
+        const r = await fetch(`https://api.nasa.gov/neo/rest/v1/feed?start_date=${today}&end_date=${today}&api_key=DEMO_KEY`);
+        const d = await r.json();
+        const asteroids = d.near_earth_objects[today] || [];
+        const hazardous = asteroids.filter(a => a.is_potentially_hazardous_asteroid);
+        asteroidBox.innerHTML = `☄️ <b>Asteroids:</b> ${asteroids.length} close (Danger: <span style="color:${hazardous.length>0?'red':'green'}">${hazardous.length}</span>)`;
+    } catch(e) { asteroidBox.innerHTML = "NASA Data Offline"; }
+
+    // 2. Solar Weather (NOAA API)
+    try {
+        const r = await fetch('https://services.swpc.noaa.gov/products/noaa-scales.json');
+        const d = await r.json();
+        const kp = d[0].intensity; // Kp Index
+        let status = "Quiet";
+        if(kp >= 5) status = "⚠️ SOLAR STORM ACTIVE";
+        solarBox.innerHTML = `☀️ <b>Kp-Index:</b> ${kp} (${status})`;
+        if(kp >= 5) {
+            solarBox.classList.add('space-alert-active');
+            showNotification('☀️', 'Solar Storm Warning', 'High Kp-Index detected. Possible GPS/Net issues.', 'warning');
+        }
+    } catch(e) { solarBox.innerHTML = "Solar winds unreadable"; }
+}
+fetchNASA(); // Καλείται στην αρχή
+
+// ═══ 7. SMART SOS BROADCASTER ═══
+async function sendSOS() {
+    playAlertSound('danger');
+    if(!navigator.geolocation) {
+        alert("Geolocation is disabled on your device.");
+        return;
+    }
+    
+    document.querySelector('.sos-btn').innerHTML = "⏳";
+    
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+        const lat = pos.coords.latitude.toFixed(5);
+        const lng = pos.coords.longitude.toFixed(5);
+        let batteryStr = "Unknown";
+        
+        // Λήψη μπαταρίας αν υποστηρίζεται
+        try {
+            if(navigator.getBattery) {
+                const bat = await navigator.getBattery();
+                batteryStr = Math.round(bat.level * 100) + "%";
+            }
+        } catch(e){}
+
+        // Φτιάχνει το μήνυμα
+        const gmapsLink = `https://maps.google.com/?q=${lat},${lng}`;
+        const message = `🆘 *SOS EMERGENCY* 🆘\nI need immediate assistance!\n\n📍 My Location: ${gmapsLink}\n🔋 Phone Battery: ${batteryStr}\n\n(Sent via Ultimate Disaster Monitor)`;
+        
+        // Ανοίγει το WhatsApp με προσυμπληρωμένο το κείμενο (δουλεύει και σε κινητά και σε web)
+        window.open(`whatsapp://send?text=${encodeURIComponent(message)}`, "_blank");
+        
+        // Επαναφορά κουμπιού
+        document.querySelector('.sos-btn').innerHTML = "SOS";
+        showNotification('🆘', 'SOS Triggered', 'Opening WhatsApp...', 'danger');
+    }, (err) => {
+        alert("Failed to get location. Enable GPS.");
+        document.querySelector('.sos-btn').innerHTML = "SOS";
+    });
+}
+// ═══ 8. LIVE WEBCAMS (Windy API) ═══
+let webcamsOn = false, webcamMarkers = [];
+async function fetchWebcams() {
+    if(!webcamsOn) return;
+    webcamMarkers.forEach(m => map.removeLayer(m)); webcamMarkers = [];
+    const b = map.getBounds();
+    try {
+        // Χρήση του API της Windy για κάμερες (δωρεάν access)
+        const r = await fetch(`https://api.windy.com/api/webcams/v2/list/nearby=${map.getCenter().lat},${map.getCenter().lng},50?show=webcams:image,location&key=YOUR_WINDY_KEY_IF_NEEDED`);
+        // Σημείωση: Αν δεν έχεις key, μπορούμε να χρησιμοποιήσουμε το OpenStreetMap Webcams
+        const query = `[out:json][timeout:15];node["man_made"="video_監控"](${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()});out body;`;
+        // Για το demo θα χρησιμοποιήσουμε ένα στατικό feed από γνωστές τοποθεσίες ή public webcams
+    } catch(e) {}
+}
+
+function toggleWebcams() {
+    const btn = document.querySelector('[data-layer="webcams"]');
+    if(webcamsOn) {
+        webcamsOn = false; btn.classList.remove('active');
+        webcamMarkers.forEach(m => map.removeLayer(m));
+    } else {
+        webcamsOn = true; btn.classList.add('active');
+        showNotification('📷', 'Webcams', 'Click on map icons for live view', 'info');
+        // Παράδειγμα προσθήκης κάμερας (στατικά για επίδειξη σε κεντρικά σημεία)
+        const demoCams = [{n:"Times Square", l:[40.758, -73.985], u:"https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet"}, {n:"Syntagma Square", l:[37.975, 23.735], u:"https://www.skylinewebcams.com/en/webcam/ellada/sterea-ellada/athens/athens-syntagma-square.html"}];
+        demoCams.forEach(c => {
+            const m = L.marker(c.l, {icon: L.divIcon({html:'📷', className:''})}).bindPopup(`<b>${c.n}</b><br><a href="${c.u}" target="_blank">View Live Feed</a>`).addTo(map);
+            webcamMarkers.push(m);
+        });
+    }
+}
 // ═══ PWA SERVICE WORKER (inline registration) ═══
 if('serviceWorker' in navigator){
     const swCode=`
@@ -1814,4 +2194,3 @@ User question: ${text}`
 </script>
 </body>
 </html>
-
