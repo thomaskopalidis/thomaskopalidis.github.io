@@ -239,7 +239,29 @@
             0% { width: 10px; height: 10px; opacity: 1; }
             100% { width: 120px; height: 120px; opacity: 0; }
         }
+    /* --- ΕΛΑΧΙΣΤΟΠΟΙΗΣΗ UI PANEL --- */
+.minimize-btn { width:32px; height:32px; border-radius:8px; border:1px solid var(--border); background:var(--bg-layer); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; transition:all 0.2s; margin-left:4px; }
+.minimize-btn:hover { background:var(--bg-layer-hover); transform:scale(1.05); }
+#ui-panel.collapsed .search-row, #ui-panel.collapsed .tabs-container, #ui-panel.collapsed .panel-scroll { display: none !important; }
+#ui-panel.collapsed { height: auto !important; padding-bottom: 12px; }
+
+/* --- AI DISASTER BOT UI --- */
+.bot-btn { position:absolute; bottom:140px; right:16px; z-index:1000; width:48px; height:48px; border-radius:50%; border:2px solid var(--accent); background:var(--bg-panel); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 4px 16px rgba(0,119,204,0.4); transition:all 0.3s; }
+.bot-btn:hover { transform:scale(1.1); background:var(--bg-layer-hover); }
+.bot-window { position:absolute; bottom:90px; right:76px; z-index:1001; width:320px; max-width:calc(100vw - 90px); background:var(--bg-panel); backdrop-filter:blur(24px); border-radius:16px; border:1px solid var(--border-light); box-shadow:var(--shadow); display:none; flex-direction:column; overflow:hidden; transition:all 0.3s; }
+.bot-window.visible { display:flex; animation:fadeInUp 0.3s; }
+@keyframes fadeInUp { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
+.bot-header { background:linear-gradient(135deg, var(--accent), #00b4d8); color:#fff; padding:12px 16px; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:bold; display:flex; justify-content:space-between; align-items:center; }
+.bot-header button { background:none; border:none; color:#fff; cursor:pointer; font-size:16px; }
+.bot-chat { padding:16px; height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; font-size:11px; }
+.msg-bot { background:var(--bg-layer); padding:10px 14px; border-radius:14px 14px 14px 0; align-self:flex-start; max-width:85%; border:1px solid var(--border-light); color:var(--text-primary); line-height:1.4; }
+.msg-user { background:rgba(0,119,204,0.1); color:var(--accent); padding:10px 14px; border-radius:14px 14px 0 14px; align-self:flex-end; max-width:85%; border:1px solid rgba(0,119,204,0.2); font-weight:600;}
+.bot-input-area { display:flex; border-top:1px solid var(--border-light); padding:12px; background:var(--bg-card); }
+.bot-input-area input { flex:1; padding:10px 14px; border-radius:20px; border:1px solid var(--border); background:var(--bg-input); color:var(--text-primary); font-family:'DM Sans',sans-serif; font-size:12px; outline:none; }
+.bot-input-area input:focus { border-color:var(--accent); }
+.bot-input-area button { background:var(--accent); color:#fff; border:none; width:36px; height:36px; border-radius:50%; margin-left:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
     </style>
+
 </head>
 <body>
 <div class="lightning-flash" id="lightningFlash"></div>
@@ -256,6 +278,7 @@
             <div class="header-right">
                 <button class="sound-toggle" id="soundBtn" onclick="toggleSound()" title="Sound">🔔</button>
                 <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Theme">🌙</button>
+                <button class="minimize-btn" id="minBtn" onclick="togglePanel()" title="Minimize">➖</button>
             </div>
         </div>
         <div class="search-row">
@@ -371,6 +394,23 @@
                 <div id="health-info"><div class="no-data">Click on a point for:<br><span class="hint">🏊 Swimming · 🏃 Running · 🌿 Pollen · 😷 AQI · ☀️ UV · 🦟 Mosquitoes</span></div></div>
             </div>
         </div>
+    </div>
+    <div style="text-align: center; padding: 12px; font-size: 10px; color: var(--text-secondary); border-top: 1px solid var(--border-light); font-family: 'JetBrains Mono', monospace; background: var(--bg-panel); border-bottom-left-radius: var(--radius); border-bottom-right-radius: var(--radius);">
+        &copy; 2026 Kopalidis Thomas. All rights reserved.
+    </div>
+</div>
+<button class="bot-btn" onclick="toggleBot()" title="AI Disaster Assistant">🤖</button>
+<div id="botWindow" class="bot-window">
+    <div class="bot-header">
+        <span>🤖 AI Survival Assistant</span>
+        <button onclick="toggleBot()">✕</button>
+    </div>
+    <div class="bot-chat" id="botChat">
+        <div class="msg-bot">Hello! I am your AI Emergency Assistant. How can I help you today? (e.g., "What to do in an earthquake?")</div>
+    </div>
+    <div class="bot-input-area">
+        <input type="text" id="botInput" placeholder="Type your emergency question..." onkeypress="if(event.key==='Enter')sendBotMessage()">
+        <button onclick="sendBotMessage()">➤</button>
     </div>
 </div>
 <div id="map"></div>
@@ -1609,10 +1649,50 @@ function toggleDust(){
 // ═══ STATS ═══
 async function refreshStats(){
     const days=currentTimeRangeDays;
-    try{let u;if(days<=1)u='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson';else if(days<=7)u='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';else if(days<=30)u='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';else u=`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${getDateStr(days)}&minmagnitude=4&limit=500`;const r=await fetch(u);const d=await r.json();document.getElementById('statQuakes').textContent=(d.features||[]).length}catch(e){}
-    try{const r=await fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&days=${Math.min(days,365)}`);const d=await r.json();const e=(d.events||[]).length;try{const r2=await fetch(`https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=WF&fromdate=${getDateStr(days)}&todate=${getDateStr(0)}&alertlevel=red;orange;green`);const d2=await r2.json();document.getElementById('statFires').textContent=e+(d2.features||[]).length}catch(e2){document.getElementById('statFires').textContent=e}}catch(e){}
-    try{const r=await fetch(`https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=TC&fromdate=${getDateStr(days)}&todate=${getDateStr(0)}&alertlevel=red;orange;green`);const d=await r.json();document.getElementById('statHurricanes').textContent=(d.features||[]).length}catch(e){document.getElementById('statHurricanes').textContent='0'}
-    try{const r=await fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=floods&status=open&days=${Math.min(days,365)}`);const d=await r.json();const e=(d.events||[]).length;try{const r2=await fetch(`https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=FL&fromdate=${getDateStr(days)}&todate=${getDateStr(0)}&alertlevel=red;orange;green`);const d2=await r2.json();document.getElementById('statFloods').textContent=e+(d2.features||[]).length}catch(e2){document.getElementById('statFloods').textContent=e}}catch(e){}
+    try{
+        let u;
+        if(days<=1)u='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson';
+        else if(days<=7)u='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
+        else if(days<=30)u='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';
+        else u=`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${getDateStr(days)}&minmagnitude=4&limit=500`;
+        const r=await fetch(u);
+        const d=await r.json();
+        document.getElementById('statQuakes').textContent=(d.features||[]).length
+    }catch(e){}
+
+    try{
+        const r=await fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&days=${Math.min(days,365)}`);
+        const d=await r.json();
+        const e=(d.events||[]).length;
+        try{
+            const r2=await fetch(`https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=WF&fromdate=${getDateStr(days)}&todate=${getDateStr(0)}&alertlevel=red;orange;green`);
+            const d2=await r2.json();
+            document.getElementById('statFires').textContent=e+(d2.features||[]).length
+        }catch(e2){
+            document.getElementById('statFires').textContent=e
+        }
+    }catch(e){}
+
+    try{
+        const r=await fetch(`https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=TC&fromdate=${getDateStr(days)}&todate=${getDateStr(0)}&alertlevel=red;orange;green`);
+        const d=await r.json();
+        document.getElementById('statHurricanes').textContent=(d.features||[]).length
+    }catch(e){
+        document.getElementById('statHurricanes').textContent='0'
+    }
+
+    try{
+        const r=await fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=floods&status=open&days=${Math.min(days,365)}`);
+        const d=await r.json();
+        const e=(d.events||[]).length;
+        try{
+            const r2=await fetch(`https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=FL&fromdate=${getDateStr(days)}&todate=${getDateStr(0)}&alertlevel=red;orange;green`);
+            const d2=await r2.json();
+            document.getElementById('statFloods').textContent=e+(d2.features||[]).length
+        }catch(e2){
+            document.getElementById('statFloods').textContent=e
+        }
+    }catch(e){}
 }
 refreshStats();
 
@@ -1635,6 +1715,102 @@ if('serviceWorker' in navigator){
 // ═══ APPLY LANGUAGE ON LOAD ═══
 document.getElementById('langBtn').textContent=currentLang.toUpperCase();
 if(currentLang!=='en')applyLang();
+
+// ═══ UI PANEL MINIMIZE ═══
+function togglePanel() {
+    const p = document.getElementById('ui-panel');
+    const b = document.getElementById('minBtn');
+    p.classList.toggle('collapsed');
+    b.textContent = p.classList.contains('collapsed') ? '➕' : '➖';
+}
+
+// ═══ AI DISASTER BOT LOGIC ═══
+function toggleBot() {
+    document.getElementById('botWindow').classList.toggle('visible');
+}
+
+async function sendBotMessage() {
+    const input = document.getElementById('botInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const chat = document.getElementById('botChat');
+    chat.innerHTML += `<div class="msg-user">${text}</div>`;
+    input.value = '';
+    chat.scrollTop = chat.scrollHeight;
+
+    const typingId = 'typing-' + Date.now();
+    chat.innerHTML += `<div class="msg-bot" id="${typingId}"><i>Typing... 🤖</i></div>`;
+    chat.scrollTop = chat.scrollHeight;
+
+    // ⚠️ Not secure in frontend. Works for demo only.
+    const GEMINI_API_KEY = "AIzaSyB64Ah5SjFmcCX7NfvEwdS29LYbAUdNo_k";
+    const URL = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent";
+
+    try {
+        const response = await fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-goog-api-key": GEMINI_API_KEY
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{
+                        text: `You are an AI Emergency Assistant.
+Answer clearly and completely in 2-3 short sentences.
+If the user asks about a historical disaster, explain the incident clearly and fully.
+User question: ${text}`
+                    }]
+                }],
+                generationConfig: {
+                 maxOutputTokens: 300,
+                temperature: 0.2
+                }
+            })
+        });
+
+        const data = await response.json();
+
+        // If HTTP-level error
+        if (!response.ok) {
+            const msg = data?.error?.message || `HTTP ${response.status}`;
+            console.error("Gemini HTTP Error:", msg, data);
+            document.getElementById(typingId).innerHTML = `⚠️ AI Error: ${msg}`;
+            return;
+        }
+
+        // If API returned an error object
+        if (data?.error) {
+            console.error("API Error Detail:", data.error);
+            document.getElementById(typingId).innerHTML = `⚠️ AI Error: ${data.error.message}`;
+            return;
+        }
+
+        // ✅ Robust parsing (joins all parts)
+        let botReply = "";
+        const parts = data?.candidates?.[0]?.content?.parts;
+
+        if (Array.isArray(parts)) {
+            botReply = parts.map(p => p?.text || "").join("").trim();
+        }
+
+        // Fallbacks
+        if (!botReply) {
+            const blockReason = data?.promptFeedback?.blockReason;
+            if (blockReason) botReply = "⚠️ Response blocked by safety system.";
+            else botReply = "⚠️ AI returned an empty response.";
+        }
+
+        document.getElementById(typingId).innerHTML = botReply;
+
+    } catch (error) {
+        console.error("Network or Script Error:", error);
+        document.getElementById(typingId).innerHTML = "⚠️ Connection issue. Please try again.";
+    } finally {
+        chat.scrollTop = chat.scrollHeight;
+    }
+}
 </script>
 </body>
 </html>
