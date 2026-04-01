@@ -233,7 +233,9 @@
       <li><strong>Demographic Pyramids</strong> — composite dual-panel dashboards combining total age-group breakdowns with gender pyramids, dynamically generated per selected country</li>
       <li><strong>Median Age Choropleth Map</strong> — European geographic heatmap sourced live from Eurostat's <code>demo_pjanind</code> dataset, visualizing aging disparities across the continent</li>
       <li><strong>Migration Composition Analysis</strong> — 100% stacked bar charts comparing native vs foreign-born population shares (2015 vs 2023) across all target countries, sorted by immigration rate</li>
-      <li><strong>AI Demographics Assistant</strong> — conversational LLM agent powered by Groq, context-aware of the selected country's real-time Eurostat data.</li>
+      <li><strong>Population Forecasting (ML)</strong> — Random Forest Regressor trained on 2000–2024 Eurostat data using lag features, trend momentum, and recursive forecasting to project population trajectories to 2035 per country.</li>
+      <li><strong>Demographic Clustering (ML)</strong> — unsupervised K-Means clustering (K=2–6, user-selectable) grouping 40+ countries by age structure and growth dynamics, visualized via interactive scatter plots and choropleth maps.</li>
+      <li><strong>AI Demographics Assistant</strong> — conversational LLM agent (LLaMA 3.3 70B via Groq API), context-aware of the selected country's real-time Eurostat data.</li>
     </ul>
     <div style="margin-top: 15px;">
       <p style="margin-bottom: 5px;">
