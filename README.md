@@ -37,7 +37,7 @@ unless otherwise stated. Some projects were developed in a
 professional context — any proprietary code or confidential 
 information is **not** included or disclosed.
 
-> The Agentic RAG system developed during the short-term project 
+> The Agentic RAG system developed during the technical assesment (short-term project)
 > at PwC Greece is referenced for portfolio purposes only. 
 > No proprietary code, internal documents, or confidential 
 > information of PwC Greece is shared or reproduced here.
